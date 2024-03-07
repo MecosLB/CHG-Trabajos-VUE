@@ -20,17 +20,6 @@ import Navbar from '@/components/dashboard/Navbar.vue';
 import Footer from '@/components/Footer.vue'
 </script>
 
-<style scoped>
-.dashboard {
-    display: flex;
-    flex-direction: row;
-}
-
-.container-content {
-    width: 100%;
-}
-
-.views {
-    min-height: calc(100vh - 100px);
-}
+<style>
+@import url('../css/main.css');
 </style>
