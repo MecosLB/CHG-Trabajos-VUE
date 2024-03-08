@@ -36,9 +36,22 @@
 .btn-outline-primary:focus,
 .btn-outline-primary:focus-visible,
 .btn-outline-primary:hover,
-.btn-outline-primary.show {
+.btn-outline-primary.show ,
+.btn:first-child:active {
     background-color: #2DD4BF;
     border-color: #2DD4BF;
+    box-shadow: none;
     color: #F4F6F6;
     font-weight: 500;
+}
+
+.error-form {
+    color: #C70039;
+    display: none;
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.swal2-close:focus {
+    box-shadow: none;
 }

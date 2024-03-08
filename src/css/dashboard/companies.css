@@ -1,0 +1,136 @@
+.grid-companies {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.loader-companies {
+    width: 100%;
+    height: 5px;
+    background: radial-gradient(circle closest-side, #172554 92%, #0000) calc(100%/3) 0/calc(100%/4) 100%;
+    animation: i2 0.5s infinite linear;
+}
+
+@keyframes i2 {
+    100% {
+        background-position: 0 0
+    }
+}
+
+.card {
+    border-color: transparent;
+}
+
+.card:hover {
+    cursor: pointer;
+}
+
+.list-group-item {
+    border-color: transparent;
+}
+
+.list-group {
+    width: 100%;
+}
+
+.list-group-item.title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.dropdown-item {
+    font-size: 12px;
+    color: #172554;
+}
+
+.dropdown-item.active,
+.dropdown-item:active,
+.dropdown-item:hover {
+    background-color: transparent;
+    color: #172554;
+    font-weight: bold;
+}
+
+.container-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 992px) {
+    .container-card {
+        flex-direction: column;
+    }
+}
+
+.modal-header .btn-close {
+    background-image: none;
+}
+
+.modal-header .btn-close:focus,
+.modal-header .btn-close:hover {
+    color: #C70039;
+    font-weight: bold;
+    box-shadow: none;
+}
+
+.nav-tabs .nav-link {
+    color: #172554;
+    font-size: 12px;
+}
+
+.nav-tabs .nav-link.active {
+    font-weight: bold;
+}
+.form-label {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.form-control.form-control-sm {
+    height: 25px;
+    font-size: 12px;
+}
+
+.form-control.form-control-sm:focus {
+    border-color: #DEE2E6;
+    box-shadow: none;
+}
+
+.form-select.form-select-sm {
+    height: 25px;
+    font-size: 12px;
+}
+
+.form-select.form-select-sm:focus {
+    border-color: #DEE2E6;
+    box-shadow: none;
+}
+
+.btn-select,
+.btn-select:active,
+.btn-select:checked,
+.btn-select:focus,
+.btn-select:focus-visible,
+.btn-select:hover,
+.btn-select.show ,
+.btn-select:first-child:active {
+    height: 25px;
+    font-size: 12px;
+    background: transparent;
+    color: #0C0C0C;
+    border-color: #DEE2E6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dropdown-option:hover {
+    cursor: pointer;
+    font-size: 12px;
+}

@@ -1,6 +1,6 @@
 <template>
     <div class="footer">
-        <span> Copy <i class="fa-regular fa-copyright m-2"></i> Todos los derechos reservados {{ year }}. </span>
+        <span> Todos los derechos reservados <i class="fa-regular fa-copyright m-2"></i> {{ year }} Punto CHG. </span>
     </div>
 </template>
 
@@ -10,6 +10,7 @@
     font-size: 12px;
     font-weight: bold;
     height: 50px;
+    color: #2DD4BF;
 }
 </style>
 
