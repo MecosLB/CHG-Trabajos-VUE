@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const getProfiles = async () => {
+export const getProfiles = async () => {
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/perfiles/consultar/');
         return data;
@@ -8,5 +8,3 @@ const getProfiles = async () => {
         console.warn(error);
     }
 }
-
-export default getProfiles;

@@ -195,12 +195,9 @@
 
 <script setup>
 import UsersOptions from '@/components/dashboard/UsersOptions.vue';
-import createUser from '@/helpers/createUser';
-import deleteUser from '@/helpers/deleteUser';
 import { getCompanies } from '@/helpers/companies';
-import getProfiles from '@/helpers/getProfiles';
-import getUsers from '@/helpers/getUsers';
-import updateUser from '@/helpers/updateUser';
+import { getProfiles } from '@/helpers/profiles';
+import { createUser, getUsers, updateUser, deleteUser } from '@/helpers/users';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 

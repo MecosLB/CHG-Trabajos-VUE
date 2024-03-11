@@ -123,10 +123,7 @@
 
 <script setup>
 import DeptOptions from '@/components/dashboard/DeptOptions.vue';
-import createDepartment from '@/helpers/createDepartment';
-import deleteDepartment from '@/helpers/deleteDepartment';
-import getDepartments from '@/helpers/getDepartments';
-import updateDepartment from '@/helpers/updateDepartment';
+import { createDepartment, getDepartments, updateDepartment, deleteDepartment } from '@/helpers/departments';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 
