@@ -75,7 +75,8 @@
                             {{ nombre }}
                         </td>
                         <td>
-                            <UsersOptions :userId="id" :updateTitle="updateTitle" :onUserDelete="onUserDelete" />
+                            <UsersOptions :userId="id" :userStatus="estatus" :updateTitle="updateTitle"
+                                :updateStatus="updateStatus" :onUserDelete="onUserDelete" />
                         </td>
                     </tr>
                 </tbody>
@@ -105,6 +106,20 @@
                                 name="name" placeholder="Nombre">
                             <div class="invalid-feedback">
                                 Favor de ingresar un nombre.
+                            </div>
+                        </div>
+
+                        <div v-if="userTitle === 'Editar' && activeUser.estatus !== 'Activo'" class="input-group mb-3">
+                            <span class="input-group-text">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
+                            <select class="form-control" name="empresa" v-model="activeUser.estatus">
+                                <option value="" selected>Seleccionar estatus...</option>
+                                <option value="Activo" selected>Activo</option>
+                                <option value="Suspendido" selected>Suspendido</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Favor de seleccionar un estatus válido.
                             </div>
                         </div>
 
@@ -296,6 +311,10 @@ const validatePassword = () => {
 }
 
 // General functions
+const hideModal = () => {
+    document.querySelector('.btn-close').click();
+}
+
 const validateFields = () => {
     const isTherePassword = document.querySelector('input[name=password]').value || document.querySelector('input[name=passwordConfirmation]').value;
     const inputsDom = document.querySelectorAll('.needs-validation input'),
@@ -362,6 +381,7 @@ const onUserCreate = async () => {
         return console.warn(msgGet);
 
     users.value = usuarios;
+    hideModal();
 }
 
 const onUserUpdate = async () => {
@@ -374,6 +394,7 @@ const onUserUpdate = async () => {
         return console.warn(msgGet);
 
     users.value = usuarios;
+    hideModal();
 }
 
 const onUserDelete = async ({ currentTarget }) => {
@@ -414,6 +435,51 @@ const onUserDelete = async ({ currentTarget }) => {
         users.value = usuarios;
     });
 
+}
+
+const updateStatus = async ({ currentTarget }) => {
+    const userId = currentTarget.getAttribute('userId');
+    setActiveUser(userId);
+
+    activeUser.value = {
+        ...activeUser.value,
+        estatus: 'Suspendido',
+    }
+
+    Swal.fire({
+        title: `<h3 class='fw-bold'>
+                    ¿Desea inhabilitar al usuario: ${activeUser.value.nombre}?
+                </h3>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Inhabilitar',
+        // confirmButtonColor: "#3085d6",
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: "#d33",
+        width: '500px',
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
+
+        const { error: errorUpdate, mensaje: msgUpdate } = await updateUser({ ...activeUser.value });
+        if (errorUpdate)
+            return console.warn(msgUpdate);
+
+        Swal.fire({
+            title: `<h3 class='fw-bold'>
+                    ¡Usuario inhabilitado!
+                </h3>`,
+            icon: 'success',
+            confirmButtonText: 'Cerrar',
+            width: '400px',
+        });
+
+        const { error: errorGet, mensaje: msgGet, usuarios = [] } = await getUsers({});
+        if (errorGet)
+            return console.warn(msgGet);
+
+        users.value = usuarios;
+        emptyUser();
+    });
 }
 
 const modalUser = ({ target }) => {
