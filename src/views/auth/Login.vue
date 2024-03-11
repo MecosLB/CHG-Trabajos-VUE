@@ -5,8 +5,7 @@
                 <div class="p-2">
                     <div class="container-login">
                         <div class="col-sm-12 col-md-4 img-login">
-                            <img :src="`logotipos/${infoCompany.id}.png`" class="img-fluid rounded-5"
-                                alt="Logotipo">
+                            <img :src="`logotipos/${infoCompany.id}.png`" class="img-fluid rounded-5" alt="Logotipo">
                         </div>
 
                         <div class="col-sm-12 col-md-8">
@@ -111,6 +110,7 @@ const user = async () => {
     const res = await validateSession();
     const { error } = res;
     if (!error) router.push({ name: 'dashboard' })
+    else router.push({ name: 'auth' })
 };
 
 const setError = (conf) => {
@@ -173,7 +173,7 @@ const validateLogin = async () => {
         showAlert({
             title: '¡Error!',
             message: message,
-            icon: 'error' 
+            icon: 'error'
         });
 
         return;

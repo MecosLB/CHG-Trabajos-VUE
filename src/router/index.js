@@ -1,7 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 import dashboardRouter from './dashboard';
+
 import authRouter from './auth';
+
+import guard from './auth/guard';
 
 const routes = [
     {
@@ -24,11 +27,11 @@ const routes = [
     },
     {
         path: '/dashboard',
+        beforeEnter: [ guard ],
         ...dashboardRouter
     },
     {
         path: '/:pathMatch(.*)*',
-        beforeEnter: [  ],
         component: () => import(/* webpackChunkName: "Not Found" */ '@/views/NotFound.vue'),
     },
     {

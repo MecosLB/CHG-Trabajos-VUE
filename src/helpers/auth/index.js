@@ -79,7 +79,7 @@ export const validateSession = async () => {
 
 export const logout = async () => {
     try {
-        const token = JSON.parse(localStorage.getItem('token'));
+        const token = localStorage.getItem('token');
 
         const formData = new FormData();
 

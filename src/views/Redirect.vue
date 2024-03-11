@@ -18,9 +18,16 @@ import Footer from '@/components/Footer.vue';
 import { validateLanding } from '@/helpers/auth/';
 
 const props = defineProps([ 'landing' ]);
-const landing = props.landing;
 
 onMounted(async () => {
+    const company = localStorage.getItem('company');
+    if (company) router.push({ name: 'auth' })
+
+    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    if (user && token) router.push({ name: 'dashboard' })
+
+    const landing = props.landing;
     await redirect(landing);
 });
 

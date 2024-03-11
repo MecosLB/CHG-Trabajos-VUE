@@ -28,25 +28,19 @@
 </template>
 
 <script setup>
-// const iClass = ref('fa-solid fa-arrow-right-long');
-
 import { onMounted, ref } from 'vue';
 
-// import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
-// import useAuth from '@/modules/auth/composables/useAuth';
-// const iClass = ref('fa-solid fa-arrow-left-long');
-
-// const router = useRouter();
-
-// const { logout } = useAuth();
+import { logout } from '@/helpers/auth';
 
 const nameCompany = ref('');
 
 const user = ref({});
 
-onMounted(() => {
-    setInfo();
+onMounted(async () => {
+    await setInfo();
 });
 
 const setInfo = () => {
