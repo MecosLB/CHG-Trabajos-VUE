@@ -6,9 +6,15 @@
 
         <ul class="dropdown-menu">
             <li>
-                <button @click="updateTitle" :userId="userId" class="dropdown-item text-primary" data-bs-toggle="modal"
-                    data-bs-target="#userModal">
+                <button @click="updateTitle" :userId="userId" class="dropdown-item text-secondary"
+                    data-bs-toggle="modal" data-bs-target="#userModal">
                     <i class="fa-solid fa-pencil"></i> Editar
+                </button>
+            </li>
+
+            <li v-if="userStatus === 'Activo'">
+                <button @click="updateStatus" :userId="userId" class="dropdown-item text-secondary">
+                    <i class="fa-solid fa-eye-slash"></i> Inhabilitar
                 </button>
             </li>
 
@@ -22,5 +28,5 @@
 </template>
 
 <script setup>
-const props = defineProps(['userId', 'updateTitle', 'onUserDelete']);
+const props = defineProps(['userId', 'userStatus', 'updateTitle', 'updateStatus', 'onUserDelete']);
 </script>
