@@ -1,9 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
-    scrollbar-color: rgb(23, 37, 84) transparent;
-    scrollbar-width: thin;
     font-family: 'Montserrat', sans-serif;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #172554;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #172554;
 }
 
 .dashboard {
@@ -36,7 +51,7 @@
 .btn-outline-primary:focus,
 .btn-outline-primary:focus-visible,
 .btn-outline-primary:hover,
-.btn-outline-primary.show ,
+.btn-outline-primary.show,
 .btn:first-child:active {
     background-color: #2DD4BF;
     border-color: #2DD4BF;

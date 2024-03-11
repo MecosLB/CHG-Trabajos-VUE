@@ -1,90 +1,112 @@
 <template>
     <section id="companies">
-        <div class="row">
-            <div v-if="loader" class="loader-view">
-                <Loader />
-            </div>
+        <div v-if="loader" class="loader-view">
+            <Loader />
+        </div>
 
-            <div v-else>
-                <div class="d-flex align-items-center justify-content-between mt-3">
-                    <div class="btn-pagination">
-                        <nav aria-label="Pagination">
-                            <ul class="pagination">
-                                <li class="page-item m-1" v-if="pagination.page > 1">
-                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-5"
-                                        @click="previous">
-                                        <i class="fa-solid fa-chevron-left"></i>
-                                    </button>
-                                </li>
+        <div v-else class="mt-3">
+            <div class="actions-companies">
+                <div class="col-sm-12 col-md-12 col-lg-4">
+                    <nav aria-label="Pagination">
+                        <ul class="pagination mb-0">
+                            <li class="page-item m-1" v-if="pagination.page > 1">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-5"
+                                    @click="previous">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                            </li>
 
-                                <li class="page-item m-1" v-if="pagination.page < totalPages">
-                                    <button type="button" class="btn btn-sm btn-outline-primary rounded-5"
-                                        @click="next">
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav>
+                            <li class="page-item m-1" v-if="pagination.page < totalPages">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-5"
+                                    @click="next">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="col-sm-12 col-md-12 col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text" id="buscar">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                        <input type="text" class="form-control form-control-sm rounded-5 form-search"
+                            placeholder="Buscar empresa" aria-label="Buscar" v-model="searchForm" @keyup.enter="search">
                     </div>
+                </div>
 
-                    <div class="btn-add">
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-5" data-bs-toggle="modal"
-                            data-bs-target="#modalCompany" @click="modalCompany({ action: 'Nuevo' })">
+                <div class="col-sm-12 col-md-12 col-lg-4">
+                    <div class="d-flex align-items-center justify-content-end">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-5 w-auto"
+                            data-bs-toggle="modal" data-bs-target="#modalCompany"
+                            @click="modalCompany({ action: 'Nuevo' })">
                             <i class="fa-solid fa-plus me-1"></i>
                             Agregar Empresa
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <div v-if="loaderCompanies">
+            <div v-if="loaderCompanies">
+                <div class="m-4">
                     <div class="loader-companies"></div>
                 </div>
+            </div>
 
-                <div v-if="companies.length > 0" class="grid-companies">
-                    <div v-for="company in companies" :key="company.id"
-                        class="col-sm-12 col-md-12 col-lg-6 p-2">
-                        <div class="card">
-                            <div class="d-flex flex-row align-items-center justify-content-end p-2">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-primary rounded-1" type="button"
-                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <button class="dropdown-item" type="button" data-bs-toggle="modal"
-                                                data-bs-target="#modalCompany"
-                                                @click="modalCompany({ action: 'Editar', company: company })">
-                                                <i class="fa-solid fa-pen me-1"></i>
-                                                Editar
-                                            </button>
-                                        </li>
+            <div class="grid-companies">
+                <div v-if="companies.length > 0" v-for="company in companies" :key="company.id"
+                    class="col-sm-12 col-md-12 col-lg-6 p-2">
+                    <div class="card ">
+                        <div class="d-flex flex-row align-items-center justify-content-end p-2">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-primary rounded-1" type="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                            data-bs-target="#modalCompany"
+                                            @click="modalCompany({ action: 'Editar', company: company })">
+                                            <i class="fa-solid fa-pen me-1"></i>
+                                            Editar
+                                        </button>
+                                    </li>
 
-                                        <li>
-                                            <button class="dropdown-item" type="button">
-                                                <i class="fa-solid fa-eye-slash me-1"></i>
-                                                Inhabilitar
-                                            </button>
-                                        </li>
+                                    <li v-if="company.estatus !== 'Suspendido'">
+                                        <button class="dropdown-item" type="button" @click="suspend(company)">
+                                            <i class="fa-solid fa-eye-slash me-1"></i>
+                                            Suspender
+                                        </button>
+                                    </li>
 
-                                        <li>
-                                            <button class="dropdown-item" type="button">
-                                                <i class="fa-solid fa-trash me-1"></i>
-                                                Eliminar
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
+                                    <li v-if="company.estatus == 'Suspendido'">
+                                        <button class="dropdown-item" type="button" @click="active(company)">
+                                            <i class="fa-solid fa-eye me-1"></i>
+                                            Activar
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button class="dropdown-item" type="button" @click="deleteC(company)">
+                                            <i class="fa-solid fa-trash me-1"></i>
+                                            Eliminar
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="container-card animate__animated animate__fadeIn">
+                            <div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
+                                <img :id="company.id" :src="`/logotipos/${company.id}.png`" class="img-fluid p-2"
+                                    :alt="company.nombre" :title="company.nombre"
+                                    @error="setDefaultLogotipo(company.id)">
                             </div>
 
-                            <div class="container-card">
-                                <div
-                                    class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
-                                    <img :id="company.id" :src="`logotipos/${company.id}.png`" class="img-fluid p-2" :alt="company.nombre"
-                                        :title="company.nombre" @error="setDefaultLogotipo(company.id)">
-                                </div>
-
-                                <div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center p-md-2">
+                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                <div class="d-flex flex-column pb-md-3">
                                     <ul class="list-group">
                                         <li class="list-group-item title">
                                             {{ company.nombre }}
@@ -102,10 +124,20 @@
                                             {{ company.telefono }}
                                         </li>
                                     </ul>
+
+                                    <div class="status-company text-end">
+                                        <small class="fw-bold">
+                                            <i :class="setClassStatus(company.estatus)"></i> {{ company.estatus }}
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div v-if="showMessageCompanies" class="w-100">
+                    <div class="alert alert-danger text-center fw-bold" role="alert" v-html="messageCompanies"></div>
                 </div>
             </div>
         </div>
@@ -119,7 +151,8 @@
                     <h6 class="modal-title">
                         {{ actionCompany }} Empresa
                     </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="modalCompany({ action: 'Cerrar' })">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        @click="modalCompany({ action: 'Cerrar' })">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
@@ -309,11 +342,12 @@ import Swal from 'sweetalert2'
 
 import Loader from '@/components/Loader.vue';
 
-import { getCompanies, addCompany } from '@/helpers/companies';
+import { activeCompany, deleteCompany, getCompanies, addCompany, suspendCompany, updateInfoCompany } from '@/helpers/companies';
 import { uploadFile, deleteFile } from '@/helpers/uploader';
 
 const actionCompany = ref('');
 const companies = ref([]);
+const companyId = ref('');
 const companyForm = ref({
     estatus: 'Activo',
     nombre: '',
@@ -334,14 +368,17 @@ const fileTemp = ref({});
 const loader = ref(true);
 const loaderCompanies = ref(true);
 const loaderModal = ref(false);
+const messageCompanies = ref('No existen registros de empresas.');
 const pagination = ref({
     page: 1,
     results: 3,
 });
+const searchForm = ref('');
 const statusOptions = ref([
     { value: 'Activo', label: 'Activar' },
     { value: 'Suspendido', label: 'Suspender' }
 ]);
+const showMessageCompanies = ref(false);
 const totalPages = ref(1);
 
 onMounted(async () => {
@@ -352,7 +389,62 @@ onMounted(async () => {
     if (companies.value.length) loaderCompanies.value = false;
 });
 
-const editCompany = () => {
+const active = async (company) => {
+    const customClass = {
+        confirmButton: 'btn btn-sm btn-outline-primary rounded-1',
+        cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
+    };
+
+    Swal.fire({
+        title: 'Activar Empresa',
+        text: '¿Realmente desea activar esta empresa?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Activar',
+        cancelButtonText: 'No, cancelar',
+        reverseButtons: true,
+        customClass: customClass
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const res = await activeCompany(company);
+            const { error, mensaje } = res;
+            if (error) showAlert({ title: '¡ERROR!', message: res.mensaje, icon: 'error' })
+            else showAlert({ title: '¡ÉXITO!', message: res.mensaje, icon: 'success' })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            /*  */
+        }
+    });
+}
+
+const deleteC = async (company) => {
+    const customClass = {
+        confirmButton: 'btn btn-sm btn-outline-primary rounded-1',
+        cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
+    };
+
+    Swal.fire({
+        title: 'Eliminar Empresa',
+        text: '¿Realmente desea eliminar esta empresa?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Eliminar',
+        cancelButtonText: 'No, cancelar',
+        reverseButtons: true,
+        customClass: customClass
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const res = await deleteCompany(company);
+            const { error, mensaje } = res;
+            if (error) showAlert({ title: '¡ERROR!', message: res.mensaje, icon: 'error' })
+            else showAlert({ title: '¡ÉXITO!', message: res.mensaje, icon: 'success' })
+            await loadCompanies();
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            /*  */
+        }
+    });
+}
+
+const editCompany = async () => {
     loaderModal.value = true;
 
     hideErrors();
@@ -364,6 +456,29 @@ const editCompany = () => {
         showTab({ field });
         setError({ message, field });
         return
+    }
+
+    const id = companyId.value;
+    const companyData = companyForm.value;
+    const res = await updateInfoCompany(id, companyData);
+
+    if (!res.error) {
+        document.getElementById('btn-modal').click();
+        resetForm();
+        showAlert({
+            title: '¡ÉXITO!',
+            message: res.mensaje,
+            icon: 'success'
+        })
+        loaderModal.value = false;
+        await loadCompanies();
+    } else {
+        showAlert({
+            title: '¡ERROR!',
+            message: res.mensaje,
+            icon: 'error'
+        })
+        loaderModal.value = false;
     }
 }
 
@@ -413,15 +528,32 @@ const loadCompanies = async () => {
     companies.value = [];
     loaderCompanies.value = true;
 
+    let filters = {};
+    if (searchForm.value != '') {
+        filters = {
+            estatus: '',
+            nombre: searchForm.value,
+            correo: '',
+            telefono: '',
+        };
+    }
+
     try {
-        const res = await getCompanies(pagination.value);
+        const res = await getCompanies(pagination.value, filters);
         const { error, mensaje, empresas, totalPaginas } = res;
 
         if (!error) {
             companies.value = empresas;
             totalPages.value = totalPaginas;
+            showMessageCompanies.value = false;
+            messageCompanies.value = '';
+            if (empresas.length == 0 ) {
+                showMessageCompanies.value = true;
+                messageCompanies.value = mensaje;
+            } 
         } else {
-            console.log(mensaje)
+            showMessageCompanies.value = true;
+            messageCompanies.value = mensaje;
         }
     } catch (error) {
         console.log(error);
@@ -463,11 +595,13 @@ const modalCompany = (conf) => {
 }
 
 const newCompany = async () => {
+    loaderModal.value = true;
     hideErrors();
 
     const { error, message, field } = validateForm();
 
     if (error) {
+        loaderModal.value = false;
         showTab({ field });
         setError({ message, field });
         return
@@ -485,6 +619,15 @@ const newCompany = async () => {
             message: res.mensaje,
             icon: 'success'
         })
+        await loadCompanies();
+        loaderModal.value = false;
+    } else {
+        showAlert({
+            title: '¡ERROR!',
+            message: res.mensaje,
+            icon: 'error'
+        })
+        loaderModal.value = false;
     }
 }
 
@@ -504,7 +647,7 @@ const previous = async () => {
     await loadCompanies();
 }
 
-const resetForm =  () => {
+const resetForm = () => {
     loaderModal.value = false;
 
     document.getElementById('general-tab').click();
@@ -530,6 +673,11 @@ const resetForm =  () => {
     };
 }
 
+const search = async () => {
+    const value = searchForm.value;
+    await loadCompanies();
+}
+
 const statusSelected = (status) => {
     const optionSelected = companyForm.value.estatus;
 
@@ -538,6 +686,11 @@ const statusSelected = (status) => {
     });
 
     return option ? option.label : '';
+}
+
+const setClassStatus = (status) => {
+    if (status == 'Activo') return 'fa-solid fa-circle-dot me-2 active'
+    else return 'fa-solid fa-circle-dot me-2 suspend'
 }
 
 const setError = (conf) => {
@@ -553,18 +706,18 @@ const setError = (conf) => {
 }
 
 const setInfoCompany = (company) => {
-    const { nombre, landing, correo, telefono, direccion } = company;
+    const { id, nombre, landing, correo, telefono, direccion } = company;
 
     const form = companyForm.value;
 
     const temp = direccion.split(',');
     const calle = temp[0];
-    
+
     const numeros = temp[1];
     const temp2 = numeros.split('-');
-    
+
     const noInterior = temp2[0];
-    
+
     let noExterior = '';
     if (temp2[1]) {
         noExterior = temp2[1];
@@ -574,7 +727,8 @@ const setInfoCompany = (company) => {
     const colonia = temp[3];
     const municipio = temp[4];
     const estado = temp[5];
-    
+
+    companyId.value = id;
     form.nombre = nombre;
     form.landing = landing;
     form.correo = correo;
@@ -601,13 +755,40 @@ const showTab = ({ field }) => {
     if (fieldsAddress.includes(field)) document.getElementById('address-tab').click();
 }
 
-const showAlert = ({title, message, icon}) => {
+const showAlert = ({ title, message, icon }) => {
     Swal.fire({
         title: title,
         html: message,
         icon: icon,
         showConfirmButton: false,
         showCloseButton: true,
+    });
+}
+
+const suspend = async (company) => {
+    const customClass = {
+        confirmButton: 'btn btn-sm btn-outline-primary rounded-1',
+        cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
+    };
+
+    Swal.fire({
+        title: 'Suspender Empresa',
+        text: '¿Realmente desea suspender esta empresa?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, Suspender',
+        cancelButtonText: 'No, cancelar',
+        reverseButtons: true,
+        customClass: customClass
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const res = await suspendCompany(company);
+            const { error, mensaje } = res;
+            if (error) showAlert({ title: '¡ERROR!', message: res.mensaje, icon: 'error' })
+            else showAlert({ title: '¡ÉXITO!', message: res.mensaje, icon: 'success' })
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            /*  */
+        }
     });
 }
 
@@ -638,8 +819,12 @@ const validateForm = () => {
     for (const field in form) {
         if (Object.hasOwnProperty.call(form, field)) {
             const value = form[field];
-            if (actionCompany.value == 'Editar' && field != 'logotipo') {
+            if (actionCompany.value != 'Editar') {
                 if (value == '') return { error: true, message: 'Error: Campo requerido', field: field }
+            } else {
+                if (field != 'logotipo') {
+                    if (value == '') return { error: true, message: 'Error: Campo requerido', field: field }
+                }
             }
         }
     }

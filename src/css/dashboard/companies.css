@@ -30,6 +30,9 @@
 
 .list-group-item {
     border-color: transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .list-group {
@@ -60,12 +63,6 @@
     align-items: center;
     justify-content: center;
     padding: 10px;
-}
-
-@media only screen and (max-width: 992px) {
-    .container-card {
-        flex-direction: column;
-    }
 }
 
 .modal-header .btn-close {
@@ -112,6 +109,21 @@
     box-shadow: none;
 }
 
+.swal2-confirm {
+    background-color: #2DD4BF !important;
+    border-color: #2DD4BF !important;
+    box-shadow: none !important;
+    color: #F4F6F6 !important;
+    font-weight: 500 !important;
+}
+
+.swal2-cancel {
+    background-color: #C70039 !important;
+    border-color: #C70039 !important;
+    box-shadow: none !important;
+    font-weight: 500 !important;
+}
+
 .btn-select,
 .btn-select:active,
 .btn-select:checked,
@@ -133,4 +145,49 @@
 .dropdown-option:hover {
     cursor: pointer;
     font-size: 12px;
+}
+
+.form-search {
+    height: 30px !important;
+}
+
+.input-group-text {
+    background: transparent;
+    border-color: transparent;
+}
+
+.status-company {
+    padding: 1px 1rem;
+}
+
+.status-company .suspend {
+    color: #F4D03F;
+}
+
+.status-company .active {
+    color: #48C9B0;
+}
+
+.actions-companies {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+@media only screen and (max-width: 992px) {
+    .container-card {
+        flex-direction: column;
+    }
+
+    .actions-companies {
+        flex-wrap: wrap-reverse;
+    }
+
+    .actions-companies > [class*="col-"] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 8px;
+    }
 }
