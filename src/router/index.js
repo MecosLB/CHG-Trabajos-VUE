@@ -25,7 +25,17 @@ const routes = [
     {
         path: '/dashboard',
         ...dashboardRouter
-    }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        beforeEnter: [  ],
+        component: () => import(/* webpackChunkName: "Not Found" */ '@/views/NotFound.vue'),
+    },
+    {
+        path: '/not-found',
+        name: 'not-found',
+        component: () => import(/* webpackChunkName: "Not Found" */ '@/views/NotFound.vue'),
+    },
 ];
 
 const router = createRouter({
