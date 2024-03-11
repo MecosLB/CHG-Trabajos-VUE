@@ -8,10 +8,10 @@
             </div>
         </div>
 
-        <div class="container d-flex flex-column gap-5 mt-3">
-            <button @click="updateTitle" class="btn-main btn px-5 rounded-5 w-auto ms-auto" data-bs-toggle="modal"
+        <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
+            <button @click="updateTitle" class="btn btn-sm btn-outline-primary rounded-5" data-bs-toggle="modal"
                 data-bs-target="#userModal">
-                <i class="fa-solid fa-plus"></i> Añadir
+                <i class="fa-solid fa-plus"></i> Agregar Usuario
             </button>
 
             <table v-if="users.length" class="table users table-striped text-center align-middle">
@@ -88,43 +88,38 @@
         </div>
 
         <!-- Modal Editar usuario -->
-        <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
+        <div class="modal fade" id="userModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="userModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5 fw-bold" id="userModalLabel">{{ userTitle }} usuario {{ userTitle
+                        <h6 class="modal-title" id="userModalLabel">{{ userTitle }} usuario {{ userTitle
                 ===
-                'Editar' ? `: ${activeUser.nombre}` : null }}</h1>
+                'Editar' ? `: ${activeUser.nombre}` : null }}</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body needs-validation" novalidate>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-id-card"></i>
-                            </span>
-                            <input @change="onChangeInput" type="text" v-model="activeUser.nombre" class="form-control"
-                                name="name" placeholder="Nombre">
+                    <div class="modal-body row">
+                        <div class="col-12 col-lg-6 mb-2">
+                            <label for="name" class="form-label">Nombre:</label>
+                            <input @change="onChangeInput" type="text" v-model="activeUser.nombre"
+                                class="form-control form-control-sm" name="name">
                             <div class="invalid-feedback">
                                 Favor de ingresar un nombre.
                             </div>
                         </div>
 
-                        <div v-if="userTitle === 'Añadir'" class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-envelope"></i>
-                            </span>
-                            <input @change="onChangeInput" type="email" v-model="activeUser.correo" class="form-control"
-                                name="mail" placeholder="Correo electrónico">
+                        <div v-if="userTitle === 'Añadir'" class="col-12 col-lg-6 mb-2">
+                            <label for="mail" class="form-label">Correo electrónico:</label>
+                            <input @change="onChangeInput" type="email" v-model="activeUser.correo"
+                                class="form-control form-control-sm" name="mail">
                             <div class="invalid-feedback">
                                 Favor de ingresar un correo electrónico.
                             </div>
                         </div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-building"></i>
-                            </span>
-                            <select class="form-control" name="empresa" v-model="activeUser.idEmpresa">
+                        <div class="col-12 col-lg-6 mb-2">
+                            <label for="empresa" class="form-label">Empresa</label>
+                            <select class="form-control form-control-sm" name="empresa" v-model="activeUser.idEmpresa">
                                 <option value="" selected>Seleccionar empresa...</option>
 
                                 <template v-if="companies.length">
@@ -138,11 +133,9 @@
                             </div>
                         </div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-id-badge"></i>
-                            </span>
-                            <select class="form-control" name="perfil" v-model="activeUser.idPerfil">
+                        <div :class="`col-12 ${userTitle === 'Añadir' ? 'col-lg-6' : ''} mb-2`">
+                            <label for="perfil" class="form-label">Perfil:</label>
+                            <select class="form-control form-control-sm" name="perfil" v-model="activeUser.idPerfil">
                                 <option value="" selected>Seleccionar perfil...</option>
 
                                 <template v-if="profiles.length">
@@ -156,36 +149,32 @@
                             </div>
                         </div>
 
-                        <h6 class="fw-bold">
+                        <h6 class="col-12 my-3 fw-bold">
                             {{ userTitle === 'Editar' ? 'Cambiar' : 'Crear' }} contraseña <i
                                 class="fa-solid fa-circle-info"></i>
                         </h6>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-key"></i>
-                            </span>
-                            <input type="password" class="form-control" name="password" placeholder="Nueva contraseña">
+                        <div class="col-12 mb-2">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control form-control-sm" name="password">
                             <div class="invalid-feedback">
                                 Favor de ingresar una contraseña.
                             </div>
                         </div>
 
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-circle-check"></i>
-                            </span>
-                            <input type="password" class="form-control" name="passwordConfirmation"
-                                placeholder="Repetir contraseña">
+                        <div class="col-12 mb-2">
+                            <label for="passwordConfirmation" class="form-label">Repetir contraseña</label>
+                            <input type="password" class="form-control form-control-sm" name="passwordConfirmation">
                             <div class="invalid-feedback">
                                 Favor de confirmar la contraseña.
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                            data-bs-dismiss="modal">Cerrar</button>
 
-                        <button @click="modalUser" type="button" class="btn btn-main">Guardar</button>
+                        <button @click="modalUser" type="button" class="btn btn-sm btn-outline-primary">Guardar</button>
                     </div>
                 </div>
             </div>

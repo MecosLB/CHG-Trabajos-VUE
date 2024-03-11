@@ -22,4 +22,5 @@ import Footer from '@/components/Footer.vue'
 
 <style>
 @import url('../css/main.css');
+@import url('../css/dashboard/companies.css');
 </style>
