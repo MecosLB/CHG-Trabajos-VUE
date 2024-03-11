@@ -29,7 +29,7 @@
                                     <ul class="dropdown-menu p-2">
                                         <li>
                                             <label for="statusFilter">Estatus:</label>
-                                            <select @change="onUserFilter" v-model="filterDept.estatus"
+                                            <select @change="onDeptFilter" v-model="filterDept.estatus"
                                                 class="form-control" name="statusFilter">
                                                 <option value="">Seleccionar...</option>
                                                 <option value="Activo">Activo</option>
@@ -52,7 +52,7 @@
                                     <ul class="dropdown-menu p-2">
                                         <li>
                                             <label for="nameFilter">Nombre:</label>
-                                            <input @change="onUserFilter" v-model="filterDept.nombre"
+                                            <input @change="onDeptFilter" v-model="filterDept.nombre"
                                                 class="form-control" type="text" name="nameFilter"
                                                 placeholder="Filtros...">
                                         </li>
@@ -75,8 +75,8 @@
                             {{ nombre }}
                         </td>
                         <td>
-                            <!-- <UsersOptions :deptId="id" :userStatus="estatus" :updateTitle="updateTitle"
-                                :updateStatus="updateStatus" :onUserDelete="onUserDelete" /> -->
+                            <DeptOptions :deptId="id" :deptStatus="estatus" :updateTitle="updateTitle"
+                                :updateStatus="updateStatus" :onDeptDelete="onDeptDelete" />
                         </td>
                     </tr>
                 </tbody>
@@ -92,15 +92,16 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5 fw-bold" id="deptModalLabel">{{ deptTitle }} usuario {{ deptTitle
-                ===
-                'Editar' ? `: ${activeDept.nombre}` : null }}</h1>
+                        <h1 class="modal-title fs-5 fw-bold" id="deptModalLabel">{{ deptTitle }} departamento {{
+                deptTitle
+                    ===
+                    'Editar' ? `: ${activeDept.nombre}` : null }}</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body needs-validation" novalidate>
                         <div class="input-group mb-3">
                             <span class="input-group-text">
-                                <i class="fa-solid fa-id-card"></i>
+                                <i class="fa-solid fa-suitcase"></i>
                             </span>
                             <input @change="onChangeInput" type="text" v-model="activeDept.nombre" class="form-control"
                                 name="name" placeholder="Departamento">
@@ -121,11 +122,11 @@
 </template>
 
 <script setup>
-import UsersOptions from '@/components/dashboard/UsersOptions.vue';
-import createUser from '@/helpers/createUser';
-import deleteUser from '@/helpers/deleteUser';
+import DeptOptions from '@/components/dashboard/DeptOptions.vue';
+import createDepartment from '@/helpers/createDepartment';
+import deleteDepartment from '@/helpers/deleteDepartment';
 import getDepartments from '@/helpers/getDepartments';
-import updateUser from '@/helpers/updateUser';
+import updateDepartment from '@/helpers/updateDepartment';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 
@@ -133,7 +134,7 @@ const departments = ref([]),
     deptTitle = ref('Añadir'),
     activeDept = ref({
         id: '',
-        idEmpresa: '',
+        idEmpresa: '4009fd7d-de5a-4997-8f63-e27d9c34ff34',
         estatus: '',
         nombre: '',
     }),
@@ -150,7 +151,6 @@ onMounted(async () => {
     deptModal = document.getElementById('deptModal');
 
     const { departamentos } = await getDepartments({});
-
     departments.value = departamentos;
 
     // Modal events
@@ -164,8 +164,12 @@ onMounted(async () => {
 
 // Ref functions
 const emptyDept = () => {
-    for (const key in activeDept.value)
-        activeDept.value[key] = '';
+    activeDept.value = {
+        ...activeDept.value,
+        id: '',
+        estatus: '',
+        nombre: '',
+    }
 }
 
 const updateTitle = ({ currentTarget }) => {
@@ -178,15 +182,13 @@ const updateTitle = ({ currentTarget }) => {
 const setActiveDept = (deptId) => {
     if (!deptId) return emptyDept();
 
-    const { id, idEmpresa, estatus, nombre } = departments.value.filter(({ id }) => id === deptId)[0];
+    const { id, estatus, nombre } = departments.value.filter(({ id }) => id === deptId)[0];
     activeDept.value = {
+        ...activeDept.value,
         id: id,
-        idEmpresa: idEmpresa,
         estatus: estatus,
         nombre: nombre,
     }
-
-    // console.log(activeDept.value);
 }
 
 // General functions
@@ -195,17 +197,11 @@ const hideModal = () => {
 }
 
 const validateFields = () => {
-    const isTherePassword = document.querySelector('input[name=password]').value || document.querySelector('input[name=passwordConfirmation]').value;
     const inputsDom = document.querySelectorAll('.needs-validation input'),
         selectsDom = document.querySelectorAll('.needs-validation select');
     const fields = [...inputsDom, ...selectsDom];
 
     for (const field of fields) {
-        if (deptTitle.value === 'Editar' && field.type === 'password' && !isTherePassword) {
-            field.classList.remove('is-invalid');
-            continue;
-        }
-
         if (!field.value) {
             field.classList.add('is-invalid');
             continue;
@@ -223,7 +219,7 @@ const onChangeInput = ({ target }) => {
     target.classList.remove('is-invalid');
 }
 
-const onUserFilter = async () => {
+const onDeptFilter = async () => {
     const { error: erroGet, mensaje: msgGet, departamentos = [] } = await getDepartments({ ...filterDept.value });
 
     if (!departamentos.length) {
@@ -250,8 +246,8 @@ const onUserFilter = async () => {
     departments.value = departamentos;
 }
 
-const onUserCreate = async () => {
-    const { error: errorCreate, mensaje: msgCreate } = await createUser({ ...activeDept.value });
+const onDeptCreate = async () => {
+    const { error: errorCreate, mensaje: msgCreate } = await createDepartment({ ...activeDept.value });
     if (errorCreate)
         return console.warn(msgCreate);
 
@@ -261,10 +257,19 @@ const onUserCreate = async () => {
 
     departments.value = departamentos;
     hideModal();
+
+    Swal.fire({
+        title: `<h3 class='fw-bold'>
+                    ${msgCreate}
+                </h3>`,
+        icon: 'success',
+        confirmButtonText: 'Cerrar',
+        width: '400px',
+    });
 }
 
-const onUserUpdate = async () => {
-    const { error: errorUpdate, mensaje: msgUpdate } = await updateUser({ ...activeDept.value });
+const onDeptUpdate = async () => {
+    const { error: errorUpdate, mensaje: msgUpdate } = await updateDepartment({ ...activeDept.value });
     if (errorUpdate)
         return console.warn(msgUpdate);
 
@@ -274,60 +279,28 @@ const onUserUpdate = async () => {
 
     departments.value = departamentos;
     hideModal();
-}
-
-const onUserDelete = async ({ currentTarget }) => {
-    const deptId = currentTarget.getAttribute('deptId');
-    setActiveDept(deptId);
 
     Swal.fire({
         title: `<h3 class='fw-bold'>
-                    ¿Desea eliminar al usuario: ${activeDept.value.nombre}?
+                    ${msgUpdate}
                 </h3>`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Eliminar',
-        // confirmButtonColor: "#3085d6",
-        cancelButtonText: 'Cancelar',
-        cancelButtonColor: "#d33",
-        width: '500px',
-    }).then(async (result) => {
-        if (!result.isConfirmed) return;
-
-        const { error: errorDelete, mensaje: msgDelete } = await deleteUser({ ...activeDept.value });
-        if (errorDelete)
-            return console.warn(msgDelete);
-
-        Swal.fire({
-            title: `<h3 class='fw-bold'>
-                    ¡Usuario eliminado!
-                </h3>`,
-            icon: 'success',
-            confirmButtonText: 'Cerrar',
-            width: '400px',
-        });
-
-        const { error: errorGet, mensaje: msgGet, departamentos = [] } = await getDepartments({});
-        if (errorGet)
-            return console.warn(msgGet);
-
-        departments.value = departamentos;
+        icon: 'success',
+        confirmButtonText: 'Cerrar',
+        width: '400px',
     });
-
 }
 
 const updateStatus = async ({ currentTarget }) => {
+    const statusDict = {
+        'Activo': 'Suspendido',
+        'Suspendido': 'Activo',
+    }
     const deptId = currentTarget.getAttribute('deptId');
     setActiveDept(deptId);
 
-    activeDept.value = {
-        ...activeDept.value,
-        estatus: 'Suspendido',
-    }
-
     Swal.fire({
         title: `<h3 class='fw-bold'>
-                    ¿Desea inhabilitar al usuario: ${activeDept.value.nombre}?
+                    ¿Desea ${activeDept.value.estatus === 'Activo' ? 'inhabilitar' : 'habilitar'} el departamento: ${activeDept.value.nombre}?
                 </h3>`,
         icon: "warning",
         showCancelButton: true,
@@ -339,13 +312,18 @@ const updateStatus = async ({ currentTarget }) => {
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
-        const { error: errorUpdate, mensaje: msgUpdate } = await updateUser({ ...activeDept.value });
+        activeDept.value = {
+            ...activeDept.value,
+            estatus: statusDict[activeDept.value.estatus],
+        }
+
+        const { error: errorUpdate, mensaje: msgUpdate } = await updateDepartment({ ...activeDept.value });
         if (errorUpdate)
             return console.warn(msgUpdate);
 
         Swal.fire({
             title: `<h3 class='fw-bold'>
-                    ¡Usuario inhabilitado!
+                    ¡Departamento ${activeDept.value.estatus === 'Activo' ? 'habilidato' : 'inhabilitado'}!
                 </h3>`,
             icon: 'success',
             confirmButtonText: 'Cerrar',
@@ -361,15 +339,55 @@ const updateStatus = async ({ currentTarget }) => {
     });
 }
 
+const onDeptDelete = async ({ currentTarget }) => {
+    const deptId = currentTarget.getAttribute('deptId');
+    setActiveDept(deptId);
+
+    Swal.fire({
+        title: `<h3 class='fw-bold'>
+                    ¿Desea eliminar el departamento: ${activeDept.value.nombre}?
+                </h3>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+        // confirmButtonColor: "#3085d6",
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: "#d33",
+        width: '500px',
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
+
+        const { error: errorDelete, mensaje: msgDelete } = await deleteDepartment({ ...activeDept.value });
+        if (errorDelete)
+            return console.warn(msgDelete);
+
+        Swal.fire({
+            title: `<h3 class='fw-bold'>
+                    ${msgDelete}
+                </h3>`,
+            icon: 'success',
+            confirmButtonText: 'Cerrar',
+            width: '400px',
+        });
+
+        const { error: errorGet, mensaje: msgGet, departamentos = [] } = await getDepartments({});
+        if (errorGet)
+            return console.warn(msgGet);
+
+        departments.value = departamentos;
+    });
+
+}
+
 const modalDept = ({ target }) => {
     if (validateFields()) return;
 
     switch (deptTitle.value) {
         case 'Añadir':
-            onUserCreate();
+            onDeptCreate();
             break;
         case 'Editar':
-            onUserUpdate();
+            onDeptUpdate();
             break;
     }
 }
