@@ -109,20 +109,6 @@
                             </div>
                         </div>
 
-                        <div v-if="userTitle === 'Editar' && activeUser.estatus !== 'Activo'" class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-eye"></i>
-                            </span>
-                            <select class="form-control" name="empresa" v-model="activeUser.estatus">
-                                <option value="" selected>Seleccionar estatus...</option>
-                                <option value="Activo" selected>Activo</option>
-                                <option value="Suspendido" selected>Suspendido</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Favor de seleccionar un estatus válido.
-                            </div>
-                        </div>
-
                         <div v-if="userTitle === 'Añadir'" class="input-group mb-3">
                             <span class="input-group-text">
                                 <i class="fa-solid fa-envelope"></i>
@@ -382,6 +368,15 @@ const onUserCreate = async () => {
 
     users.value = usuarios;
     hideModal();
+
+    Swal.fire({
+        title: `<h3 class='fw-bold'>
+                    ${msgCreate}
+                </h3>`,
+        icon: 'success',
+        confirmButtonText: 'Cerrar',
+        width: '400px',
+    });
 }
 
 const onUserUpdate = async () => {
@@ -395,6 +390,64 @@ const onUserUpdate = async () => {
 
     users.value = usuarios;
     hideModal();
+
+    Swal.fire({
+        title: `<h3 class='fw-bold'>
+                    ${msgUpdate}
+                </h3>`,
+        icon: 'success',
+        confirmButtonText: 'Cerrar',
+        width: '400px',
+    });
+}
+
+const updateStatus = async ({ currentTarget }) => {
+    const statusDict = {
+        'Activo': 'Suspendido',
+        'Suspendido': 'Activo',
+    }
+    const userId = currentTarget.getAttribute('userId');
+    setActiveUser(userId);
+
+    Swal.fire({
+        title: `<h3 class='fw-bold'>
+                    ¿Desea ${activeUser.value.estatus === 'Activo' ? 'inhabilitar' : 'habilitar'} al usuario: ${activeUser.value.nombre}?
+                </h3>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        // confirmButtonColor: "#3085d6",
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: "#d33",
+        width: '500px',
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
+
+        activeUser.value = {
+            ...activeUser.value,
+            estatus: statusDict[activeUser.value.estatus],
+        }
+
+        const { error: errorUpdate, mensaje: msgUpdate } = await updateUser({ ...activeUser.value });
+        if (errorUpdate)
+            return console.warn(msgUpdate);
+
+        Swal.fire({
+            title: `<h3 class='fw-bold'>
+                    ¡Usuario ${activeUser.value.estatus === 'Activo' ? 'habilidato' : 'inhabilitado'}!
+                </h3>`,
+            icon: 'success',
+            confirmButtonText: 'Cerrar',
+            width: '400px',
+        });
+
+        const { error: errorGet, mensaje: msgGet, usuarios = [] } = await getUsers({});
+        if (errorGet)
+            return console.warn(msgGet);
+
+        users.value = usuarios;
+        emptyUser();
+    });
 }
 
 const onUserDelete = async ({ currentTarget }) => {
@@ -435,51 +488,6 @@ const onUserDelete = async ({ currentTarget }) => {
         users.value = usuarios;
     });
 
-}
-
-const updateStatus = async ({ currentTarget }) => {
-    const userId = currentTarget.getAttribute('userId');
-    setActiveUser(userId);
-
-    activeUser.value = {
-        ...activeUser.value,
-        estatus: 'Suspendido',
-    }
-
-    Swal.fire({
-        title: `<h3 class='fw-bold'>
-                    ¿Desea inhabilitar al usuario: ${activeUser.value.nombre}?
-                </h3>`,
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: 'Inhabilitar',
-        // confirmButtonColor: "#3085d6",
-        cancelButtonText: 'Cancelar',
-        cancelButtonColor: "#d33",
-        width: '500px',
-    }).then(async (result) => {
-        if (!result.isConfirmed) return;
-
-        const { error: errorUpdate, mensaje: msgUpdate } = await updateUser({ ...activeUser.value });
-        if (errorUpdate)
-            return console.warn(msgUpdate);
-
-        Swal.fire({
-            title: `<h3 class='fw-bold'>
-                    ¡Usuario inhabilitado!
-                </h3>`,
-            icon: 'success',
-            confirmButtonText: 'Cerrar',
-            width: '400px',
-        });
-
-        const { error: errorGet, mensaje: msgGet, usuarios = [] } = await getUsers({});
-        if (errorGet)
-            return console.warn(msgGet);
-
-        users.value = usuarios;
-        emptyUser();
-    });
 }
 
 const modalUser = ({ target }) => {

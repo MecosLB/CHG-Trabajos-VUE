@@ -12,9 +12,11 @@
                 </button>
             </li>
 
-            <li v-if="userStatus === 'Activo'">
+            <li>
                 <button @click="updateStatus" :userId="userId" class="dropdown-item text-secondary">
-                    <i class="fa-solid fa-eye-slash"></i> Inhabilitar
+                    <i :class="`fa-solid fa-${userStatus === 'Activo' ? 'eye-slash' : 'eye'}`"></i> {{ userStatus ===
+                    'Activo'
+                    ? 'Inhabilitar' : 'Habilitar' }}
                 </button>
             </li>
 

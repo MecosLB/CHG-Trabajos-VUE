@@ -304,7 +304,7 @@ const updateStatus = async ({ currentTarget }) => {
                 </h3>`,
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Inhabilitar',
+        confirmButtonText: 'Confirmar',
         // confirmButtonColor: "#3085d6",
         cancelButtonText: 'Cancelar',
         cancelButtonColor: "#d33",
