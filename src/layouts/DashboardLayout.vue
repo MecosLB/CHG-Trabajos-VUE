@@ -19,7 +19,3 @@ import Sidebar from '@/components/dashboard/Sidebar.vue';
 import Navbar from '@/components/dashboard/Navbar.vue';
 import Footer from '@/components/Footer.vue'
 </script>
-
-<style>
-@import url('../css/main.css');
-</style>

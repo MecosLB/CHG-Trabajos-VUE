@@ -42,7 +42,7 @@
                                 </form>
 
                                 <div v-if="loader" class="m-4">
-                                    <div class="loader"></div>
+                                    <div class="loader-login"></div>
                                 </div>
 
                                 <div class="btn-login">
@@ -182,7 +182,3 @@ const validateLogin = async () => {
     }
 };
 </script>
-
-<style scoped>
-@import url('../../css/auth/login.css');
-</style>
