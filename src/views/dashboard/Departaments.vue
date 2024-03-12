@@ -1,11 +1,7 @@
 <template>
     <section id="departments" class="mt-3">
-        <div class="container-fluid">
-            <div class="row title-module">
-                <h6>
-                    <i class="fa-solid fa-suitcase me-2"></i> Departamentos
-                </h6>
-            </div>
+        <div class="container-fluid mb-4">
+            <Breadcrumb :moduleName="'Departamentos'" />
         </div>
 
         <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
@@ -126,6 +122,7 @@
 
 <script setup>
 import DeptOptions from '@/components/dashboard/DeptOptions.vue';
+import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
 import { createDepartment, getDepartments, updateDepartment, deleteDepartment } from '@/helpers/departments';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';

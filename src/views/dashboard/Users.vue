@@ -1,11 +1,7 @@
 <template>
     <section id="users" class="mt-3">
-        <div class="container-fluid">
-            <div class="row title-module">
-                <h6>
-                    <i class="fa-solid fa-users me-2"></i> Usuarios
-                </h6>
-            </div>
+        <div class="container-fluid mb-4">
+            <Breadcrumb :moduleName="'Usuarios'" />
         </div>
 
         <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
@@ -187,6 +183,7 @@
 
 <script setup>
 import UsersOptions from '@/components/dashboard/UsersOptions.vue';
+import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
 import { getCompanies } from '@/helpers/companies';
 import { getProfiles } from '@/helpers/profiles';
 import { createUser, getUsers, updateUser, deleteUser } from '@/helpers/users';

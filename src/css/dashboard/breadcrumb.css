@@ -1,0 +1,12 @@
+@import url('../variables.css');
+
+.router-link-active {
+    color: var(--main-blue);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: var(--main-green);
+    font-weight: 500;
+}
