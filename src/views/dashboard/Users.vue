@@ -68,10 +68,11 @@
 
                 <tbody>
                     <tr v-for="{ id, estatus, nombre } of users">
-                        <td :class="`fw-bold text-${estatus === 'Activo' ? 'success' : 'danger'}`">
-                            <i :class="`fa-${estatus === 'Activo' ? 'solid' : 'regular'} fa-circle`"></i> {{ estatus }}
+                        <td class="fw-bold status-company">
+                            <i :class="`fa-solid fa-circle-dot ${estatus === 'Activo' ? 'active' : 'suspend'}`"></i> {{
+                estatus }}
                         </td>
-                        <td>
+                        <td class="fw-bold">
                             {{ nombre }}
                         </td>
                         <td>
@@ -172,7 +173,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-outline-primary"
-                            data-bs-dismiss="modal">Cerrar</button>
+                            data-bs-dismiss="modal">Cancelar</button>
 
                         <button @click="modalUser" type="button" class="btn btn-sm btn-outline-primary">Guardar</button>
                     </div>
@@ -210,6 +211,10 @@ const companies = ref([]);
 const profiles = ref([]);
 const mensaje = ref("No existen usuarios registrados");
 
+const customClass = {
+    confirmButton: 'btn btn-sm btn-outline-primary rounded-1',
+    cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
+}
 let userModal = null;
 
 onMounted(async () => {
@@ -332,7 +337,8 @@ const onUserFilter = async () => {
                     No hay resultados para su búsqueda.
                 </p>`,
             icon: 'info',
-            confirmButtonText: 'Cerrar',
+            showConfirmButton: false,
+            showCloseButton: true,
             width: '400px',
         });
     }
@@ -360,7 +366,8 @@ const onUserCreate = async () => {
                     ${msgCreate}
                 </h3>`,
         icon: 'success',
-        confirmButtonText: 'Cerrar',
+        showConfirmButton: false,
+        showCloseButton: true,
         width: '400px',
     });
 }
@@ -382,7 +389,8 @@ const onUserUpdate = async () => {
                     ${msgUpdate}
                 </h3>`,
         icon: 'success',
-        confirmButtonText: 'Cerrar',
+        showConfirmButton: false,
+        showCloseButton: true,
         width: '400px',
     });
 }
@@ -396,16 +404,16 @@ const updateStatus = async ({ currentTarget }) => {
     setActiveUser(userId);
 
     Swal.fire({
-        title: `<h3 class='fw-bold'>
-                    ¿Desea ${activeUser.value.estatus === 'Activo' ? 'inhabilitar' : 'habilitar'} al usuario: ${activeUser.value.nombre}?
-                </h3>`,
-        icon: "warning",
+        title: `${activeUser.value.estatus === 'Activo' ? 'Suspender' : 'Activar'} Usuario`,
+        text: `¿Realmente desea ${activeUser.value.estatus === 'Activo' ? 'suspender' : 'activar'} al usuario: ${activeUser.value.nombre}?`,
+        icon: "question",
         showCancelButton: true,
         confirmButtonText: 'Confirmar',
-        // confirmButtonColor: "#3085d6",
         cancelButtonText: 'Cancelar',
         cancelButtonColor: "#d33",
         width: '500px',
+        reverseButtons: true,
+        customClass: customClass,
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
@@ -423,7 +431,8 @@ const updateStatus = async ({ currentTarget }) => {
                     ¡Usuario ${activeUser.value.estatus === 'Activo' ? 'habilidato' : 'inhabilitado'}!
                 </h3>`,
             icon: 'success',
-            confirmButtonText: 'Cerrar',
+            showConfirmButton: false,
+            showCloseButton: true,
             width: '400px',
         });
 
@@ -441,16 +450,16 @@ const onUserDelete = async ({ currentTarget }) => {
     setActiveUser(userId);
 
     Swal.fire({
-        title: `<h3 class='fw-bold'>
-                    ¿Desea eliminar al usuario: ${activeUser.value.nombre}?
-                </h3>`,
-        icon: "warning",
+        title: 'Eliminar Usuario',
+        text: `¿Realmente desea eliminar al usuario: ${activeUser.value.nombre}?`,
+        icon: "question",
         showCancelButton: true,
         confirmButtonText: 'Eliminar',
-        // confirmButtonColor: "#3085d6",
         cancelButtonText: 'Cancelar',
         cancelButtonColor: "#d33",
         width: '500px',
+        reverseButtons: true,
+        customClass: customClass,
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
@@ -463,7 +472,8 @@ const onUserDelete = async ({ currentTarget }) => {
                     ¡Usuario eliminado!
                 </h3>`,
             icon: 'success',
-            confirmButtonText: 'Cerrar',
+            showConfirmButton: false,
+            showCloseButton: true,
             width: '400px',
         });
 
