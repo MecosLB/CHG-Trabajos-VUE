@@ -8,20 +8,20 @@
             </div>
         </div>
 
-        <div class="container d-flex flex-column gap-5 mt-3">
-            <button @click="updateTitle" class="btn-main btn px-5 rounded-5 w-auto ms-auto" data-bs-toggle="modal"
-                data-bs-target="#deptModal">
-                <i class="fa-solid fa-plus"></i> Añadir
+        <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
+            <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary px-5 rounded-5"
+                data-bs-toggle="modal" data-bs-target="#deptModal">
+                <i class="fa-solid fa-plus"></i> Agregar Departamento
             </button>
 
             <table v-if="departments.length" class="table departments table-striped text-center align-middle">
                 <thead>
-                    <tr>
+                    <tr class="align-middle">
                         <th scope="col">
                             <div class="d-flex justify-content-center align-items-center gap-2">
                                 Estatus
                                 <div class="dropend">
-                                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
+                                    <button class="btn-icon" type="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="fa-solid fa-filter"></i>
                                     </button>
@@ -44,7 +44,7 @@
                             <div class="d-flex justify-content-center align-items-center gap-2">
                                 Nombre
                                 <div class="dropend">
-                                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
+                                    <button class="btn-icon" type="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="fa-solid fa-filter"></i>
                                     </button>
@@ -68,10 +68,11 @@
 
                 <tbody>
                     <tr v-for="{ id, estatus, nombre } of departments">
-                        <td :class="`fw-bold text-${estatus === 'Activo' ? 'success' : 'danger'}`">
-                            <i :class="`fa-${estatus === 'Activo' ? 'solid' : 'regular'} fa-circle`"></i> {{ estatus }}
+                        <td class="fw-bold status-company">
+                            <i :class="`fa-solid fa-circle-dot ${estatus === 'Activo' ? 'active' : 'suspend'}`"></i> {{
+                estatus }}
                         </td>
-                        <td>
+                        <td class="fw-bold">
                             {{ nombre }}
                         </td>
                         <td>
@@ -87,33 +88,35 @@
             </div>
         </div>
 
-        <!-- Modal Editar usuario -->
-        <div class="modal fade" id="deptModal" tabindex="-1" aria-labelledby="deptModalLabel" aria-hidden="true">
+        <!-- Modal Editar departamento -->
+        <div class="modal fade" id="deptModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="deptModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5 fw-bold" id="deptModalLabel">{{ deptTitle }} departamento {{
+                        <h6 class="modal-title" id="deptModalLabel">{{ deptTitle }} departamento {{
                 deptTitle
                     ===
-                    'Editar' ? `: ${activeDept.nombre}` : null }}</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    'Editar' ? `: ${activeDept.nombre}` : null }}</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
-                    <div class="modal-body needs-validation" novalidate>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">
-                                <i class="fa-solid fa-suitcase"></i>
-                            </span>
-                            <input @change="onChangeInput" type="text" v-model="activeDept.nombre" class="form-control"
-                                name="name" placeholder="Departamento">
+                    <div class="modal-body row needs-validation">
+                        <div class="col-12 mb-2">
+                            <label for="name" class="form-label">Departamento:</label>
+                            <input @change="onChangeInput" type="text" v-model="activeDept.nombre"
+                                class="form-control form-control-sm" name="name">
                             <div class="invalid-feedback">
-                                Favor de ingresar un nombre.
+                                Favor de ingresar un nombre de departamento.
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                            data-bs-dismiss="modal">Cancelar</button>
 
-                        <button @click="modalDept" type="button" class="btn btn-main">Guardar</button>
+                        <button @click="modalDept" type="button" class="btn btn-sm btn-outline-primary">Guardar</button>
                     </div>
                 </div>
             </div>
@@ -142,6 +145,10 @@ const departments = ref([]),
 
 const mensaje = ref("No existen departamentos registrados");
 
+const customClass = {
+    confirmButton: 'btn btn-sm btn-outline-primary rounded-1',
+    cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
+}
 let deptModal = null;
 
 onMounted(async () => {
@@ -232,7 +239,8 @@ const onDeptFilter = async () => {
                     No hay resultados para su búsqueda.
                 </p>`,
             icon: 'info',
-            confirmButtonText: 'Cerrar',
+            showConfirmButton: false,
+            showCloseButton: true,
             width: '400px',
         });
     }
@@ -260,7 +268,8 @@ const onDeptCreate = async () => {
                     ${msgCreate}
                 </h3>`,
         icon: 'success',
-        confirmButtonText: 'Cerrar',
+        showConfirmButton: false,
+        showCloseButton: true,
         width: '400px',
     });
 }
@@ -282,7 +291,8 @@ const onDeptUpdate = async () => {
                     ${msgUpdate}
                 </h3>`,
         icon: 'success',
-        confirmButtonText: 'Cerrar',
+        showConfirmButton: false,
+        showCloseButton: true,
         width: '400px',
     });
 }
@@ -296,16 +306,16 @@ const updateStatus = async ({ currentTarget }) => {
     setActiveDept(deptId);
 
     Swal.fire({
-        title: `<h3 class='fw-bold'>
-                    ¿Desea ${activeDept.value.estatus === 'Activo' ? 'inhabilitar' : 'habilitar'} el departamento: ${activeDept.value.nombre}?
-                </h3>`,
-        icon: "warning",
+        title: `${activeDept.value.estatus === 'Activo' ? 'Suspender' : 'Activar'} Departamento`,
+        text: `¿Realmente desea ${activeDept.value.estatus === 'Activo' ? 'suspender' : 'activar'} el departamento: ${activeDept.value.nombre}?`,
+        icon: "question",
         showCancelButton: true,
         confirmButtonText: 'Confirmar',
-        // confirmButtonColor: "#3085d6",
         cancelButtonText: 'Cancelar',
         cancelButtonColor: "#d33",
         width: '500px',
+        reverseButtons: true,
+        customClass: customClass,
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
@@ -323,7 +333,8 @@ const updateStatus = async ({ currentTarget }) => {
                     ¡Departamento ${activeDept.value.estatus === 'Activo' ? 'habilidato' : 'inhabilitado'}!
                 </h3>`,
             icon: 'success',
-            confirmButtonText: 'Cerrar',
+            showConfirmButton: false,
+            showCloseButton: true,
             width: '400px',
         });
 
@@ -341,16 +352,16 @@ const onDeptDelete = async ({ currentTarget }) => {
     setActiveDept(deptId);
 
     Swal.fire({
-        title: `<h3 class='fw-bold'>
-                    ¿Desea eliminar el departamento: ${activeDept.value.nombre}?
-                </h3>`,
-        icon: "warning",
+        title: 'Eliminar Departamento',
+        text: `¿Realmente desea eliminar el departamento: ${activeDept.value.nombre}?`,
+        icon: "question",
         showCancelButton: true,
         confirmButtonText: 'Eliminar',
-        // confirmButtonColor: "#3085d6",
         cancelButtonText: 'Cancelar',
         cancelButtonColor: "#d33",
         width: '500px',
+        reverseButtons: true,
+        customClass: customClass,
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
@@ -363,7 +374,8 @@ const onDeptDelete = async ({ currentTarget }) => {
                     ${msgDelete}
                 </h3>`,
             icon: 'success',
-            confirmButtonText: 'Cerrar',
+            showConfirmButton: false,
+            showCloseButton: true,
             width: '400px',
         });
 

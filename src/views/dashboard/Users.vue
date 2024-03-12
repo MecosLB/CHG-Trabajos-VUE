@@ -9,19 +9,19 @@
         </div>
 
         <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
-            <button @click="updateTitle" class="btn btn-sm btn-outline-primary rounded-5" data-bs-toggle="modal"
+            <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary rounded-5" data-bs-toggle="modal"
                 data-bs-target="#userModal">
                 <i class="fa-solid fa-plus"></i> Agregar Usuario
             </button>
 
             <table v-if="users.length" class="table users table-striped text-center align-middle">
                 <thead>
-                    <tr>
+                    <tr class="align-middle">
                         <th scope="col">
                             <div class="d-flex justify-content-center align-items-center gap-2">
                                 Estatus
                                 <div class="dropend">
-                                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
+                                    <button class="btn-icon" type="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="fa-solid fa-filter"></i>
                                     </button>
@@ -44,7 +44,7 @@
                             <div class="d-flex justify-content-center align-items-center gap-2">
                                 Nombre
                                 <div class="dropend">
-                                    <button class="btn btn-secondary" type="button" data-bs-toggle="dropdown"
+                                    <button class="btn-icon" type="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
                                         <i class="fa-solid fa-filter"></i>
                                     </button>
@@ -97,9 +97,11 @@
                         <h6 class="modal-title" id="userModalLabel">{{ userTitle }} usuario {{ userTitle
                 ===
                 'Editar' ? `: ${activeUser.nombre}` : null }}</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
                     </div>
-                    <div class="modal-body row">
+                    <div class="modal-body row needs-validation">
                         <div class="col-12 col-lg-6 mb-2">
                             <label for="name" class="form-label">Nombre:</label>
                             <input @change="onChangeInput" type="text" v-model="activeUser.nombre"

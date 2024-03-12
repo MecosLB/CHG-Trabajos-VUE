@@ -129,6 +129,17 @@
 }
 
 /* Utilities */
+.btn-icon {
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    border: none;
+}
+
+.btn-icon:hover,
+.btn-icon:focus {
+    color: var(--main-green);
+}
+
 .card {
     border-color: transparent;
 }
