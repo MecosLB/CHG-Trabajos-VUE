@@ -4,7 +4,11 @@
             <Loader />
         </div>
 
-        <div v-else class="mt-3">
+        <div v-else>
+            <div class="container-fluid mb-4">
+                <Breadcrumb :moduleName="'Empresas'" />
+            </div>
+
             <div class="actions-companies">
                 <div class="col-sm-12 col-md-12 col-lg-4">
                     <nav aria-label="Pagination">
@@ -17,8 +21,7 @@
                             </li>
 
                             <li class="page-item m-1" v-if="pagination.page < totalPages">
-                                <button type="button" class="btn btn-sm btn-outline-primary rounded-5"
-                                    @click="next">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-5" @click="next">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </li>
@@ -100,7 +103,7 @@
 
                         <div class="container-card animate__animated animate__fadeIn">
                             <div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
-                                <img :id="company.id" :src="`logotipos/${company.id}.png`" class="img-fluid p-2"
+                                <img :id="company.id" :src="`logotipos/${company.id}.png`" class="img-fluid p-2 rounded-5"
                                     :alt="company.nombre" :title="company.nombre"
                                     @error="setDefaultLogotipo(company.id)">
                             </div>
@@ -341,6 +344,7 @@ import { onMounted, ref } from 'vue';
 import Swal from 'sweetalert2'
 
 import Loader from '@/components/Loader.vue';
+import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
 
 import { activeCompany, deleteCompany, getCompanies, addCompany, suspendCompany, updateInfoCompany } from '@/helpers/companies';
 import { uploadFile, deleteFile } from '@/helpers/uploader';
@@ -547,10 +551,10 @@ const loadCompanies = async () => {
             totalPages.value = totalPaginas;
             showMessageCompanies.value = false;
             messageCompanies.value = '';
-            if (empresas.length == 0 ) {
+            if (empresas.length == 0) {
                 showMessageCompanies.value = true;
                 messageCompanies.value = mensaje;
-            } 
+            }
         } else {
             showMessageCompanies.value = true;
             messageCompanies.value = mensaje;
@@ -832,3 +836,7 @@ const validateForm = () => {
     return { error: false, message: '', field: '' }
 }
 </script>
+
+<style scoped>
+@import url('../../css/dashboard/companies.css');
+</style>

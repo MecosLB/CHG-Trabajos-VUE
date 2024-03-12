@@ -19,4 +19,8 @@ import Loader from '@/components/Loader.vue';
     flex-direction: column;
     height: calc(100vh - 50px);
 }
+
+small {
+    font-weight: bold;
+}
 </style>
