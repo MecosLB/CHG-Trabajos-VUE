@@ -1,7 +1,7 @@
 <template>
     <div id="sidebar" class="sidebar show">
-        <div class="logo m-2 mb-3">
-            <img :src="logoCompany" class="img-fluid rounded-5" :alt="nameCompany" :title="nameCompany">
+        <div class="logo">
+            <img :src="logoCompany" class="img-fluid img-sidebar" :alt="nameCompany" :title="nameCompany">
         </div>
 
         <div class="menu">
@@ -46,14 +46,18 @@ import { onMounted, ref } from 'vue';
 const nameCompany = ref('');
 const logoCompany = ref('logotipos/default.png');
 
-onMounted(() => {
-    setInfo();
+onMounted(async () => {
+    await setInfo();
 });
 
-const setInfo = () => {
+const setInfo = async () => {
     const company = JSON.parse(localStorage.getItem('company'));
     const { id, name } = company;
     nameCompany.value = name;
-    logoCompany.value = 'logotipos/' + id + '.png';
+    logoCompany.value = `logotipos/${company.id}.png`;
 }
 </script>
+
+<style scoped>
+@import url('../../css/dashboard/sidebar.css');
+</style>

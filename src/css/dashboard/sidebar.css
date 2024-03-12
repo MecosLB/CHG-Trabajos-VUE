@@ -1,0 +1,55 @@
+@import url('../variables.css');
+
+/* SideBar */
+
+.sidebar {
+    background-color: var(--main-blue);
+    min-height: 100vh;
+    width: 250px;
+    transition: all ease-in-out 0.5s;
+    overflow: hidden;
+}
+
+.sidebar.show {
+    width: 250px;
+}
+
+.sidebar.hide {
+    width: 0px;
+}
+
+.sidebar .logo {
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar .img-sidebar {
+    max-height: 150px;
+    padding: 8px;
+    border-radius: 25px;
+}
+
+.sidebar .menu {
+    margin-top: 20px;
+}
+
+.sidebar .list-group-item {
+    background-color: var(--main-blue);
+    border-color: var(--main-blue);
+    color: #FCFFFF;
+    display: flex;
+    max-width: 250px;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar .list-group-item:hover,
+.sidebar .list-group-item:focus {
+    background-color: var(--main-blue);
+    border-color: var(--main-blue);
+    color: var(--main-green);
+}
+
+.sidebar .router-link-exact-active {
+    color: var(--main-green);
+    font-weight: bold;
+}
