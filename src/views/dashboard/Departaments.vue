@@ -1,5 +1,5 @@
 <template>
-    <section id="departments" class="mt-3">
+    <section id="departments">
         <div class="container-fluid mb-4">
             <Breadcrumb :moduleName="'Departamentos'" />
         </div>

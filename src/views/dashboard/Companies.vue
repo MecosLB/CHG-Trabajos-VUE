@@ -836,7 +836,3 @@ const validateForm = () => {
     return { error: false, message: '', field: '' }
 }
 </script>
-
-<style scoped>
-@import url('../../css/dashboard/companies.css');
-</style>

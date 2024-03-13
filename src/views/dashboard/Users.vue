@@ -1,12 +1,12 @@
 <template>
-    <section id="users" class="mt-3">
+    <section id="users">
         <div class="container-fluid mb-4">
             <Breadcrumb :moduleName="'Usuarios'" />
         </div>
 
         <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
-            <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary rounded-5" data-bs-toggle="modal"
-                data-bs-target="#userModal">
+            <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary rounded-5"
+                data-bs-toggle="modal" data-bs-target="#userModal">
                 <i class="fa-solid fa-plus"></i> Agregar Usuario
             </button>
 

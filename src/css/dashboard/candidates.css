@@ -1,0 +1,55 @@
+@import url(../variables.css);
+#candidates .status-filter {
+  width: 250px;
+  max-width: 250px;
+}
+#candidates .searchbar {
+  width: 300px;
+  max-width: 300px;
+}
+#candidates .candidate.card {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+#candidates .candidate.card.received {
+  border-color: var(--main-green);
+}
+#candidates .candidate.card.received .fa-circle-user,
+#candidates .candidate.card.received .status > i {
+  color: var(--main-green);
+}
+#candidates .candidate.card.seen {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+#candidates .candidate.card.seen .fa-circle-user,
+#candidates .candidate.card.seen .status > i {
+  color: rgba(0, 0, 0, 0.3);
+}
+#candidates .candidate.card.discarded {
+  border-color: #dc3545;
+}
+#candidates .candidate.card.discarded .fa-circle-user,
+#candidates .candidate.card.discarded .status > i {
+  color: #dc3545;
+}
+#candidates .candidate.card .list-group {
+  border: unset;
+}
+#candidates .candidate.card .header .icon {
+  font-size: 2.5rem;
+}
+#candidates .candidate.card .header .name * {
+  margin: 0;
+  font-size: 12px;
+}
+#candidates .candidate.card .header .name h6 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (min-width: 1024px) {
+  #candidates .candidate.card .header .name h6 {
+    max-width: 180px;
+  }
+}
+
+/*# sourceMappingURL=candidates.css.map */

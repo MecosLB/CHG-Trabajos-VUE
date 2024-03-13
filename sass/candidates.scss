@@ -1,0 +1,91 @@
+@import url(../variables.css);
+
+// Candidates
+
+#candidates {
+    .status-filter {
+        width: 250px;
+        max-width: 250px;
+    }
+
+    .searchbar {
+        width: 300px;
+        max-width: 300px;
+    }
+
+    .candidate.card {
+        border: 1px solid rgba(#000, 0.3);
+
+        &.received {
+            border-color: var(--main-green);
+
+            .fa-circle-user,
+            .status>i {
+                color: var(--main-green);
+            }
+        }
+
+        &.seen {
+            border-color: rgba(#000, 0.3);
+
+            .fa-circle-user,
+            .status>i {
+                color: rgba(#000, 0.3);
+            }
+        }
+
+        &.discarded {
+            border-color: #dc3545;
+
+            .fa-circle-user,
+            .status>i {
+                color: #dc3545;
+            }
+        }
+
+        .list-group {
+            border: unset;
+        }
+
+        .header {
+            .icon {
+                font-size: 2.5rem;
+            }
+
+            .name {
+                * {
+                    margin: 0;
+                    font-size: 12px;
+                }
+
+                h6 {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    @media (min-width: 1024px) {
+                        max-width: 180px;
+                    }
+                }
+            }
+        }
+
+        // .status {
+        //     .received {
+        //         color: var(--main-green);
+        //     }
+
+        //     .seen {
+        //         color: rgba(#000, 0.3);
+        //     }
+
+        //     .asigned {
+        //         color: var(--main-blue);
+        //     }
+
+        //     .discarded {
+        //         color: #F4D03F;
+        //     }
+        // }
+    }
+}
