@@ -1,29 +1,24 @@
-export const guardDashboard = async (to, from, next) => {
+export const guardDashboard = (to, from, next) => {
     const token = localStorage.getItem('token');
-    if (!token) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        next({ name: 'auth' })
-    }
-
     const user = localStorage.getItem('user');
-    if (!user) {
+    
+    if ((!token) && (!user)) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         next({ name: 'auth' })
+    } else {
+        next()
     }
-
-    next()
 };
 
-export const guardAuth = async (to, from, next) => {
+export const guardAuth = (to, from, next) => {
     const company = localStorage.getItem('company');
     if (!company) {
         localStorage.removeItem('company');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         next({ name: 'not-found' })
+    } else {
+        next()
     }
-
-    next()
 };

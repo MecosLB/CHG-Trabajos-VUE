@@ -21,17 +21,23 @@ const props = defineProps([ 'landing' ]);
 
 onMounted(async () => {
     const company = localStorage.getItem('company');
-    if (company) router.push({ name: 'auth' })
-
     const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
-    if (user && token) router.push({ name: 'dashboard' })
 
-    const landing = props.landing;
-    await redirect(landing);
+    if (company) {
+        router.push({ name: 'auth' });
+        return;
+    } else if (user && token) {
+        router.push({ name: 'dashboard' });
+        return;
+    } else {
+        await redirect();
+        return;
+    }
 });
 
-const redirect = async (landing) => {
+const redirect = async () => {
+    const landing = props.landing; 
     const data = { landing };
     const res = await validateLanding(data);
     const { error, mensaje } = res;

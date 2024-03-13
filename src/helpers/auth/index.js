@@ -81,6 +81,13 @@ export const logout = async () => {
     try {
         const token = localStorage.getItem('token');
 
+        if (!token) {
+            localStorage.removeItem('company');
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            return { error: false, message: '' };
+        }
+
         const formData = new FormData();
 
         formData.append('token', token);

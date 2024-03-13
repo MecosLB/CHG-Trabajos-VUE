@@ -77,6 +77,16 @@
     box-shadow: none;
 }
 
+a {
+    text-decoration: none;
+}
+
+.router-link-active {
+    color: var(--main-blue);
+    font-weight: bold;
+    text-decoration: none;
+}
+
 /* Footer */
 .footer {
     display: flex;

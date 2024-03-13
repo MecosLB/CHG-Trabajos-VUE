@@ -1,7 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
 
 /* Bootstrap */
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,4 +22,4 @@ import './css/dashboard/home.css';
 import './css/dashboard/navbar.css';
 
 
-createApp(App).use(store).use(router).mount('#app')
+createApp(App).use(store).use(router).mount('#app');

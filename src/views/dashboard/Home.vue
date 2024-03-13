@@ -11,7 +11,23 @@
 
             <div class="grid-home">
                 <div class="row mt-3 mb-3">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12  mb-3">
+                        <router-link :to="{ name: 'candidates' }">
+                            <div class="card">
+                                <div class="car-body p-3">
+                                    <div class="row text-center">
+                                        <h6> Nuevos Candidatos </h6>
+                                        <h1> {{ totalNewCandidates }} </h1>
+                                        <small> pendientes por revisar </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </router-link>
+                    </div>
+                </div>
+
+                <div class="row mt-3 mb-3">
+                    <div class="col-sm-12 mb-3">
                         <div class="card car-vacancies">
                             <div class="car-body p-3">
                                 <div class="row text-center">
@@ -66,27 +82,45 @@
                 </div>
                 
                 <div class="row mt-3 mb-3">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-sm-12 col-md-6 mb-3">
                         <div class="card">
                             <div class="car-body p-3">
                                 <div class="row text-center">
-                                    <h6> Nuevos Candidatos </h6>
-                                    <h1> {{ totalNewCandidates }} </h1>
-                                    <small> Candidatos pendientes por revisar </small>
+                                    <h6> Reporte de Candidatos de las Vacantes  </h6>
+                                </div> 
+
+                                <div v-if="dataReport.length > 0" class="chart">
+                                    <DoughnutChart :chartData="chartVacancies" />
+                                </div>
+
+                                <div v-else class="row text-center mt-2">
+                                    <small> No existen candidatos registrados para las vacantes de el mes de  </small>
+                                </div>
+
+                                <div class="row text-center fw-bold mt-2">
+                                    <small> {{ monthVacancies }} </small>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-sm-12 col-md-6 mb-3">
                         <div class="card">
                             <div class="car-body p-3">
                                 <div class="row text-center">
-                                    <h6> Reporte de Candidatos </h6>
+                                    <h6> Reporte de Candidatos  </h6>
                                 </div> 
 
-                                <div class="chart">
-                                    <DoughnutChart :chartData="chartData" />
+                                <div v-if="dataReport.length > 0" class="chart">
+                                    <DoughnutChart :chartData="chartCandidates" />
+                                </div>
+
+                                <div v-else class="row text-center mt-2">
+                                    <small> No existen candidatos registrados para el mes de  </small>
+                                </div>
+
+                                <div class="row text-center fw-bold mt-2">
+                                    <small> {{ monthCandidates }} </small>
                                 </div>
                             </div>
                         </div>
@@ -105,13 +139,17 @@ import { Chart, registerables } from 'chart.js';
 
 import Loader from '@/components/Loader.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
-import { getVacancies } from '@/helpers/dashboard/home';
+import { getReports, getVacancies } from '@/helpers/dashboard/home';
 
 Chart.register(...registerables);
 
 const candidates = ref(0);
-const chartData = ref({});
+const chartCandidates = ref({});
+const chartVacancies = ref({});
+const dataReport = ref([]);
 const loader = ref(true);
+const monthCandidates = ref('');
+const monthVacancies = ref('');
 const totalNewCandidates = ref(0);
 const vacancies = ref([]);
 
@@ -120,16 +158,43 @@ onMounted(async () => {
     setInterval(updateTotal, 250);
 });
 
-const getChartData = async () => {
-    chartData.value = {
-        labels: [ 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domigo' ],
+const dataCandidates = async ({ mes, labels, data, colors }) => {
+    monthCandidates.value = mes;
+    dataReport.value = data;
+
+    chartCandidates.value = {
+        labels: labels,
         datasets: [
             {
-                data: [ 5, 10, 4, 3, 1, 0, 7 ],
-                backgroundColor: [ '#172554', '#2DD4BF', '#172554', '#2DD4BF', '#172554', '#2DD4BF', '#2DD4BF' ],
-            },
+                data: data,
+                backgroundColor: colors,
+            }
         ],
     };
+}
+
+const dataVacancies = async ({ mes, labels, data, colors }) => {
+    monthVacancies.value = mes;
+    dataReport.value = data;
+
+    chartVacancies.value = {
+        labels: labels,
+        datasets: [
+            {
+                data: data,
+                backgroundColor: colors,
+            }
+        ],
+    };
+}
+
+const reports = async () => {
+    const res = await getReports();
+    if (!res.error) {
+        const { candidatos, vacantesCandidatos } = res;
+        await dataCandidates(candidatos);
+        await dataVacancies(vacantesCandidatos);
+    }
 }
 
 const setVacancies = async () => {
@@ -144,7 +209,7 @@ const setVacancies = async () => {
 }
 
 const loadView = async () => {
-    await getChartData();
+    await reports();
     await setVacancies();
     loader.value = false;
 }

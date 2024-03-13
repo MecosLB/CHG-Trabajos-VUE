@@ -1,5 +1,13 @@
 import axios from 'axios';
 
+export const getReports = async () => {
+    const formData = new FormData();
+
+    const url = 'https://bolsa-testing.puntochg.com/api/reportes/inicio/';
+    const { data } = await axios.post(url, formData);
+    return data;
+}
+
 export const getVacancies = async (pagination = {}, filters = {}) => {
     const formData = new FormData();
 
