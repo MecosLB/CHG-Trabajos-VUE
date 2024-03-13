@@ -1,0 +1,46 @@
+@import url('../variables.css');
+
+/* Navbar */
+.navbar {
+    height: 80px;
+    background-color: var(--main-white);
+}
+
+.navbar .btn-outline-primary {
+    border-color: var(--main-green);
+    color: var(--main-green);
+    font-weight: 500;
+    width: 100%;
+}
+
+.navbar .btn-outline-primary:active,
+.navbar .btn-outline-primary:checked,
+.navbar .btn-outline-primary:focus,
+.navbar .btn-outline-primary:focus-visible,
+.navbar .btn-outline-primary:hover {
+    background-color: var(--main-green) !important;
+    border-color: var(--main-green) !important;
+    box-shadow: none;
+    color: var(--main-white);
+}
+
+.navbar .dropdown-item {
+    font-size: 12px;
+}
+
+.navbar .dropdown-item:active,
+.navbar .dropdown-item:focus {
+    background-color: transparent;
+    color: var(--main-green);
+}
+
+.navbar .btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+    background-color: var(--main-green) !important;
+    border-color: var(--main-green) !important;
+    box-shadow: none;
+    color: var(--main-white);
+}

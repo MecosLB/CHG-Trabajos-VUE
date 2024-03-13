@@ -78,9 +78,3 @@ const btnSideBar = () => {
     }, sidebarClass.contains('show') ? 300 : 0);
 }
 </script>
-
-<style>
-.navbar {
-    background-color: #FFFFFF;
-}
-</style>
