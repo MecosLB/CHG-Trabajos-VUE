@@ -16,7 +16,9 @@
                             <div class="card">
                                 <div class="car-body p-3">
                                     <div class="row text-center">
-                                        <h6> Nuevos Candidatos </h6>
+                                        <h6>
+                                            <i class="fa-solid fa-user-plus me-2"></i> Nuevos Candidatos
+                                        </h6>
                                         <h1> {{ totalNewCandidates }} </h1>
                                         <small> pendientes por revisar </small>
                                     </div>
@@ -31,7 +33,9 @@
                         <div class="card car-vacancies">
                             <div class="car-body p-3">
                                 <div class="row text-center">
-                                    <h6> Vacantes Activas </h6>
+                                    <h6>
+                                        <i class="fa-solid fa-file-contract me-2"></i> Vacantes Activas
+                                    </h6>
                                 </div>
                                 
                                 <div class="table-responsive mt-3">
@@ -87,7 +91,7 @@
                             <div class="car-body p-3">
                                 <div class="row text-center">
                                     <h6>
-                                        <i class="fa-solid fa-chart-simple fa-beat-fade me-2"></i> Reporte de Candidatos de las Vacantes
+                                        <i class="fa-solid fa-chart-simple me-2"></i> Reporte de Candidatos de las Vacantes
                                     </h6>
                                 </div> 
 
@@ -111,7 +115,7 @@
                             <div class="car-body p-3">
                                 <div class="row text-center">
                                     <h6>
-                                        <i class="fa-solid fa-chart-simple fa-beat-fade me-2"></i> Reporte de Candidatos
+                                        <i class="fa-solid fa-chart-simple me-2"></i> Reporte de Candidatos
                                     </h6>
                                 </div> 
 
@@ -223,12 +227,3 @@ const updateTotal = () => {
     totalNewCandidates.value ++;
 }
 </script>
-
-<style scoped>
-
-.fa-chart-simple {
-    --fa-beat-fade-opacity: 0.67;
-    --fa-beat-fade-scale: 1.075;
-}
-
-</style>
