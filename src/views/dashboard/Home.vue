@@ -86,7 +86,9 @@
                         <div class="card">
                             <div class="car-body p-3">
                                 <div class="row text-center">
-                                    <h6> Reporte de Candidatos de las Vacantes  </h6>
+                                    <h6>
+                                        <i class="fa-solid fa-chart-simple fa-beat-fade me-2"></i> Reporte de Candidatos de las Vacantes
+                                    </h6>
                                 </div> 
 
                                 <div v-if="dataReport.length > 0" class="chart">
@@ -108,7 +110,9 @@
                         <div class="card">
                             <div class="car-body p-3">
                                 <div class="row text-center">
-                                    <h6> Reporte de Candidatos  </h6>
+                                    <h6>
+                                        <i class="fa-solid fa-chart-simple fa-beat-fade me-2"></i> Reporte de Candidatos
+                                    </h6>
                                 </div> 
 
                                 <div v-if="dataReport.length > 0" class="chart">
@@ -219,3 +223,12 @@ const updateTotal = () => {
     totalNewCandidates.value ++;
 }
 </script>
+
+<style scoped>
+
+.fa-chart-simple {
+    --fa-beat-fade-opacity: 0.67;
+    --fa-beat-fade-scale: 1.075;
+}
+
+</style>
