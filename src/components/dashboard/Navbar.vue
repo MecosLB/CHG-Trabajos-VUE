@@ -43,7 +43,7 @@ onMounted(async () => {
     await setInfo();
 });
 
-const setInfo = () => {
+const setInfo = async () => {
     const company = JSON.parse(localStorage.getItem('company'));
     const { id, name } = company;
     nameCompany.value = name;

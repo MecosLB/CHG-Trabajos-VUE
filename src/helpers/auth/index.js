@@ -81,12 +81,15 @@ export const logout = async () => {
     try {
         const token = localStorage.getItem('token');
 
-        if (!token) {
+        /* if (!token) {
             localStorage.removeItem('company');
             localStorage.removeItem('user');
             localStorage.removeItem('token');
             return { error: false, message: '' };
-        }
+        } */
+
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
 
         const formData = new FormData();
 

@@ -103,8 +103,8 @@
 
                         <div class="container-card animate__animated animate__fadeIn">
                             <div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
-                                <img :id="company.id" :src="`logotipos/${company.id}.png`" class="img-fluid p-2 rounded-5"
-                                    :alt="company.nombre" :title="company.nombre"
+                                <img :id="company.id" :src="`logotipos/${company.id}.png`"
+                                    class="img-fluid p-2 rounded-5" :alt="company.nombre" :title="company.nombre"
                                     @error="setDefaultLogotipo(company.id)">
                             </div>
 
@@ -534,6 +534,8 @@ const loadCompanies = async () => {
 
     let filters = {};
     if (searchForm.value != '') {
+        pagination.value.page = 1;
+
         filters = {
             estatus: '',
             nombre: searchForm.value,
@@ -558,9 +560,19 @@ const loadCompanies = async () => {
         } else {
             showMessageCompanies.value = true;
             messageCompanies.value = mensaje;
+
+            showAlert({ 
+                title: '¡ERROR!', 
+                message: mensaje, 
+                icon: 'error',
+            });
         }
     } catch (error) {
-        console.log(error);
+        showAlert({ 
+            title: '¡ERROR!', 
+            message: error, 
+            icon: 'error',
+        });
     }
 
     loaderCompanies.value = false;

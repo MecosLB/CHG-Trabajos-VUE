@@ -142,12 +142,19 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
 import { DoughnutChart } from 'vue-chart-3';
 import { Chart, registerables } from 'chart.js';
 
+import Swal from 'sweetalert2';
+
 import Loader from '@/components/Loader.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
+
 import { getReports, getVacancies } from '@/helpers/dashboard/home';
+import { validateSession } from '@/helpers/auth';
 
 Chart.register(...registerables);
 
@@ -162,8 +169,15 @@ const totalNewCandidates = ref(0);
 const vacancies = ref([]);
 
 onMounted(async () => {
-    await loadView();
-    setInterval(updateTotal, 250);
+    const res = await validateSession();
+    console.log('home', res);
+    const { error } = res;
+    if (error) { 
+        router.push({ name: 'auth' })
+    } else {
+        await loadView();
+        setInterval(updateTotal, 250);
+    }
 });
 
 const dataCandidates = async ({ mes, labels, data, colors }) => {
@@ -198,15 +212,37 @@ const dataVacancies = async ({ mes, labels, data, colors }) => {
 
 const reports = async () => {
     const res = await getReports();
+    
+    if (res.error) {
+        showAlert({ 
+            title: '¡ERROR!', 
+            message: res.mensaje, 
+            icon: 'error',
+        });
+        return false;
+    }
+
     if (!res.error) {
         const { candidatos, vacantesCandidatos } = res;
         await dataCandidates(candidatos);
         await dataVacancies(vacantesCandidatos);
     }
+
+    return true;
 }
 
 const setVacancies = async () => {
     const res = await getVacancies();
+    
+    if (res.error) {
+        showAlert({ 
+            title: '¡ERROR!', 
+            message: res.mensaje, 
+            icon: 'error',
+        });
+        return;
+    }
+
     if (!res.error) {
         const { mensaje, vacantes, nuevosCandidatos } = res;
         if (vacantes.length > 0) {
@@ -214,6 +250,16 @@ const setVacancies = async () => {
             candidates.value = nuevosCandidatos;
         }
     }
+}
+
+const showAlert = ({ title, message, icon }) => {
+    Swal.fire({
+        title: title,
+        html: message,
+        icon: icon,
+        showConfirmButton: false,
+        showCloseButton: true,
+    });
 }
 
 const loadView = async () => {

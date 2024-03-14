@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 export const activeCompany = async (company = {}) => {
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     company.estatus = 'Activo';
 
@@ -16,7 +20,11 @@ export const activeCompany = async (company = {}) => {
 }
 
 export const addCompany = async (company = {}) => {
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     const { estatus, nombre, landing, correo, telefono, logotipo, calle, noInterior, noExterior, codigoPostal, colonia, municipio, estado } = company;
 
@@ -54,7 +62,11 @@ export const addCompany = async (company = {}) => {
 }
 
 export const deleteCompany = async (company = {}) => {
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     const { id } = company;
 
@@ -66,7 +78,11 @@ export const deleteCompany = async (company = {}) => {
 }
 
 export const getCompanies = async (pagination = {}, filters = {}) => {
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     if (Object.keys(pagination).length > 0) {
         formData.append('pagina', pagination.page);
@@ -83,7 +99,11 @@ export const getCompanies = async (pagination = {}, filters = {}) => {
 }
 
 export const suspendCompany = async (company = {}) => {
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     company.estatus = 'Suspendido';
 
@@ -98,7 +118,11 @@ export const suspendCompany = async (company = {}) => {
 }
 
 export const updateInfoCompany = async (id, company = {}) => {
+    const token = localStorage.getItem('token');
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     const { estatus, nombre, landing, correo, telefono, logotipo, calle, noInterior, noExterior, codigoPostal, colonia, municipio, estado } = company;
 
