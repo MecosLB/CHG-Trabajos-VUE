@@ -132,7 +132,7 @@
 import Loader from '@/components/Loader.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
 import CandidateOptions from '@/components/dashboard/CandidateOptions.vue';
-import { deleteCandidate, discardCandidate, getCandidates, viewCandidate } from '@/helpers/candidates';
+import { deleteCandidate, discardCandidate, getCandidates, viewCandidate } from '@/helpers/dashboard/candidates';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 
@@ -289,4 +289,4 @@ const onCandidateDelete = async (candidateId = '') => {
         await displayCandidates();
     });
 }
-</script>
+</script>@/helpers/dashboard/candidates

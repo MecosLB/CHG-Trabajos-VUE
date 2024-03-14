@@ -123,7 +123,7 @@
 <script setup>
 import DeptOptions from '@/components/dashboard/DeptOptions.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
-import { createDepartment, getDepartments, updateDepartment, deleteDepartment } from '@/helpers/departments';
+import { createDepartment, getDepartments, updateDepartment, deleteDepartment } from '@/helpers/dashboard/departments';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 
@@ -397,4 +397,4 @@ const modalDept = ({ target }) => {
             break;
     }
 }
-</script>
+</script>@/helpers/dashboard/departments

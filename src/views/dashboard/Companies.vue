@@ -346,7 +346,7 @@ import Swal from 'sweetalert2'
 import Loader from '@/components/Loader.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
 
-import { activeCompany, deleteCompany, getCompanies, addCompany, suspendCompany, updateInfoCompany } from '@/helpers/companies';
+import { activeCompany, deleteCompany, getCompanies, addCompany, suspendCompany, updateInfoCompany } from '@/helpers/dashboard/companies';
 import { uploadFile, deleteFile } from '@/helpers/uploader';
 
 const actionCompany = ref('');
@@ -835,4 +835,4 @@ const validateForm = () => {
 
     return { error: false, message: '', field: '' }
 }
-</script>
+</script>@/helpers/dashboard/companies

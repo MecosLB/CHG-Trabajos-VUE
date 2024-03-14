@@ -184,9 +184,9 @@
 <script setup>
 import UsersOptions from '@/components/dashboard/UsersOptions.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
-import { getCompanies } from '@/helpers/companies';
-import { getProfiles } from '@/helpers/profiles';
-import { createUser, getUsers, updateUser, deleteUser } from '@/helpers/users';
+import { getCompanies } from '@/helpers/dashboard/companies';
+import { getProfiles } from '@/helpers/dashboard/profiles';
+import { createUser, getUsers, updateUser, deleteUser } from '@/helpers/dashboard/users';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 
@@ -498,4 +498,4 @@ const modalUser = ({ target }) => {
             break;
     }
 }
-</script>
+</script>@/helpers/dashboard/companies@/helpers/dashboard/profiles@/helpers/dashboard/users
