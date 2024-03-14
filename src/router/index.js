@@ -4,7 +4,7 @@ import dashboardRouter from './dashboard';
 
 import authRouter from './auth';
 
-import guard from './auth/guard';
+import { guardDashboard, guardAuth } from './auth/guard';
 
 const routes = [
     {
@@ -23,11 +23,12 @@ const routes = [
     },
     {
         path: '/auth',
+        beforeEnter: [ guardAuth ],
         ...authRouter
     },
     {
         path: '/dashboard',
-        beforeEnter: [ guard ],
+        beforeEnter: [ guardDashboard ],
         ...dashboardRouter
     },
     {

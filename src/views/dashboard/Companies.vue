@@ -60,7 +60,7 @@
             <div class="grid-companies">
                 <div v-if="companies.length > 0" v-for="company in companies" :key="company.id"
                     class="col-sm-12 col-md-12 col-lg-6 p-2">
-                    <div class="card ">
+                    <div class="card">
                         <div class="d-flex flex-row align-items-center justify-content-end p-2">
                             <div class="dropdown">
                                 <button class="btn btn-sm btn-outline-primary rounded-1" type="button"

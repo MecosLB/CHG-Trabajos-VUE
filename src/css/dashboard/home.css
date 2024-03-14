@@ -1,0 +1,32 @@
+@import url('../variables.css');
+
+/* Home */
+
+#home .card {
+    border-color: rgba(0, 0, 0, 0.175);
+}
+
+#home .table-responsive th,
+#home .table-responsive td {
+    width: calc(100% / 3);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#home .table-responsive th {
+    position: sticky;
+    top: 0;
+}
+
+#home .table-responsive .list-group,
+#home .table-responsive .list-group-item {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 2px;
+}
+
+.car-vacancies {
+    max-height: 250px;
+    overflow: auto;
+}

@@ -8,7 +8,13 @@
 </template>
 
 <script setup>
+import Footer from '@/components/Footer.vue';
 import Loader from '@/components/Loader.vue';
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    console.log('Not Found', localStorage);
+});
 </script>
 
 <style scoped>
