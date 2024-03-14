@@ -1,0 +1,91 @@
+@import url(../variables.css);
+#vacancies .vacancie.card {
+  overflow: hidden;
+  flex-direction: row;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+#vacancies .vacancie.card.active {
+  border-color: var(--main-green);
+}
+#vacancies .vacancie.card.active .status {
+  background-color: var(--main-green);
+  color: #fff;
+}
+#vacancies .vacancie.card.active .title {
+  color: var(--main-green);
+}
+#vacancies .vacancie.card.suspended {
+  border-color: #F4D03F;
+}
+#vacancies .vacancie.card.suspended .status {
+  background-color: #F4D03F;
+  color: #fff;
+}
+#vacancies .vacancie.card.suspended .title {
+  color: #F4D03F;
+}
+#vacancies .vacancie.card.ended {
+  border-color: #dc3545;
+}
+#vacancies .vacancie.card.ended .status {
+  background-color: #dc3545;
+  color: #fff;
+}
+#vacancies .vacancie.card.ended .title {
+  color: #dc3545;
+}
+#vacancies .vacancie.card .info {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+#vacancies .vacancie.card .info * {
+  margin: 0;
+}
+#vacancies .vacancie.card .info span:last-child > * {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#vacancies .vacancie.card .info .title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+#vacancies .vacancie.card .info .department {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--main-blue);
+}
+#vacancies .vacancie.card .info .updated,
+#vacancies .vacancie.card .info .user {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--main-blue);
+}
+#vacancies .vacancie.card .info .user {
+  margin-top: auto;
+}
+#vacancies .vacancie.card .status {
+  min-height: 180px;
+  padding: 0 0.5rem;
+  text-align: center;
+  writing-mode: vertical-lr;
+  transform: rotate(180deg);
+}
+#vacancies .vacancie.card .date,
+#vacancies .vacancie.card .candidates,
+#vacancies .vacancie.card .options {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#vacancies .vacancie.card .date {
+  font-weight: 600;
+  border-left: 1px dashed rgba(0, 0, 0, 0.3);
+  border-right: 1px dashed rgba(0, 0, 0, 0.3);
+}
+#vacancies .vacancie.card .candidates {
+  border-right: 1px dashed rgba(0, 0, 0, 0.3);
+}
+
+/*# sourceMappingURL=vacancies.css.map */

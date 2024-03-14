@@ -152,7 +152,7 @@ onMounted(async () => {
     deptModal = document.getElementById('deptModal');
 
     const { departamentos } = await getDepartments({});
-    departments.value = departamentos;
+    departments.value = departamentos || [];
 
     // Modal events
     deptModal.addEventListener('hidden.bs.modal', e => {
@@ -245,7 +245,7 @@ const onDeptFilter = async () => {
     if (erroGet)
         return console.warn(msgGet);
 
-    departments.value = departamentos;
+    departments.value = departamentos || [];
 }
 
 const onDeptCreate = async () => {
@@ -257,7 +257,7 @@ const onDeptCreate = async () => {
     if (errorGet)
         return console.warn(msgGet);
 
-    departments.value = departamentos;
+    departments.value = departamentos || [];
     hideModal();
 
     Swal.fire({
@@ -280,7 +280,7 @@ const onDeptUpdate = async () => {
     if (errorGet)
         return console.warn(msgGet);
 
-    departments.value = departamentos;
+    departments.value = departamentos || [];
     hideModal();
 
     Swal.fire({
@@ -339,7 +339,7 @@ const updateStatus = async ({ currentTarget }) => {
         if (errorGet)
             return console.warn(msgGet);
 
-        departments.value = departamentos;
+        departments.value = departamentos || [];
         emptyDept();
     });
 }
@@ -380,7 +380,7 @@ const onDeptDelete = async ({ currentTarget }) => {
         if (errorGet)
             return console.warn(msgGet);
 
-        departments.value = departamentos;
+        departments.value = departamentos || [];
     });
 
 }

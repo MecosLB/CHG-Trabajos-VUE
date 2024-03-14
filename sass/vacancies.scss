@@ -1,0 +1,114 @@
+@import url(../variables.css);
+
+// Vacancies
+
+#vacancies {
+    .vacancie.card {
+        overflow: hidden;
+        flex-direction: row;
+        border: 1px solid rgba(#000, 0.3);
+
+        &.active {
+            border-color: var(--main-green);
+
+            .status {
+                background-color: var(--main-green);
+                color: #fff;
+            }
+
+            .title {
+                color: var(--main-green);
+            }
+        }
+
+        &.suspended {
+            border-color: #F4D03F;
+
+            .status {
+                background-color: #F4D03F;
+                color: #fff;
+            }
+
+            .title {
+                color: #F4D03F;
+            }
+        }
+
+        &.ended {
+            border-color: #dc3545;
+
+            .status {
+                background-color: #dc3545;
+                color: #fff;
+            }
+
+            .title {
+                color: #dc3545;
+            }
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
+            padding: 0;
+
+            * {
+                margin: 0;
+            }
+
+            span:last-child>* {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+
+            .title {
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .department {
+                font-size: 1rem;
+                font-weight: 600;
+                color: var(--main-blue);
+            }
+
+            .updated,
+            .user {
+                font-size: 0.75rem;
+                font-weight: 500;
+                color: var(--main-blue);
+            }
+
+            .user {
+                margin-top: auto;
+            }
+        }
+
+        .status {
+            min-height: 180px;
+            padding: 0 0.5rem;
+            text-align: center;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+        }
+
+        .date,
+        .candidates,
+        .options {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .date {
+            font-weight: 600;
+            border-left: 1px dashed rgba(#000, 0.3);
+            border-right: 1px dashed rgba(#000, 0.3);
+        }
+
+        .candidates {
+            border-right: 1px dashed rgba(#000, 0.3);
+        }
+    }
+}

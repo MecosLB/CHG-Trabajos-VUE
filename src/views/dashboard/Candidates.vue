@@ -38,14 +38,18 @@
                         <span class="input-group-text" id="buscar">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </span>
-                        <!-- <input type="text" class="form-control form-control-sm rounded-5 form-search"
-                            placeholder="Buscar candidato" aria-label="Buscar" v-model="searchForm" @keyup.enter="search"> -->
                         <input type="text" class="form-control form-control-sm rounded-5 form-search"
                             placeholder="Buscar candidato" aria-label="Buscar" v-model="filters.nombre"
                             @keyup.enter="displayCandidates">
                     </div>
                 </span>
             </div>
+
+            <template v-if="loaderSearch">
+                <div class="m-4">
+                    <div class="loader-companies"></div>
+                </div>
+            </template>
 
             <div class="grid-candidates row justify-content-center align-items-start">
 
@@ -115,8 +119,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <object data="https://bolsa-testing.puntochg.com/cv/8ab9eef3-6d47-401b-8c86-72e1f688ad74.pdf"
-                            width="100%" height="500px"></object>
+                        <!-- <object data="" width="100%" height="500px"></object> -->
+                        <embed src="" type="application/pdf" width="100%" height="500px">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-sm btn-outline-primary"
@@ -148,7 +152,8 @@ const pagination = ref({
 
 const totalPages = ref(1),
     loader = ref(true),
-    mensaje = ref('No hemos recibido candidatos'),
+    loaderSearch = ref(true),
+    mensaje = ref('No se encontraron candidatos'),
     cvTitle = ref('');
 
 const statusClass = {
@@ -161,27 +166,40 @@ const customClass = {
     cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
 }
 
+// const baseUrl = window.location.origin;
+const baseUrl = 'https://bolsa-testing.puntochg.com';
+
 onMounted(async () => {
-    const { candidatos, totalPaginas } = await getCandidates({ ...pagination.value });
-    candidates.value = candidatos;
-    totalPages.value = totalPaginas;
+    await displayCandidates();
     loader.value = false;
 });
 
 // Ref functions
 const displayCandidates = async () => {
+    loaderSearch.value = true;
+
+    const { estatus, nombre } = filters.value;
     const { error: errorGet, mensaje: msgGet, candidatos, totalPaginas } = await getCandidates({ ...pagination.value }, { ...filters.value });
 
-    if (errorGet)
-        return console.warn(msgGet);
+    totalPages.value = totalPaginas || 1;
 
-    candidates.value = candidatos;
-    totalPages.value = totalPaginas;
+    if ((estatus || nombre) && Math.ceil(totalPages.value) < pagination.value.page) {
+        pagination.value.page = 1;
+        return await displayCandidates();
+    }
+
+    candidates.value = candidatos || [];
+
+    loaderSearch.value = false;
 }
 
 const setCvTitle = async (candidateId = '') => {
+    const pdfDOM = document.querySelector('#cvModal embed');
     const selectedCandidate = candidates.value.filter(({ id }) => candidateId === id)[0];
+
     cvTitle.value = `${selectedCandidate.nombre} ${selectedCandidate.apellidos}`;
+    pdfDOM.src = `${baseUrl}/cv/${selectedCandidate.id}.pdf`;
+
     await onCandidateView(selectedCandidate);
 }
 
@@ -289,4 +307,4 @@ const onCandidateDelete = async (candidateId = '') => {
         await displayCandidates();
     });
 }
-</script>@/helpers/dashboard/candidates
+</script>

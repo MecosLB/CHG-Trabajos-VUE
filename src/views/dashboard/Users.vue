@@ -223,9 +223,9 @@ onMounted(async () => {
         { empresas } = await getCompanies(),
         { perfiles } = await getProfiles();
 
-    users.value = usuarios;
-    companies.value = empresas;
-    profiles.value = perfiles;
+    users.value = usuarios || [];
+    companies.value = empresas || [];
+    profiles.value = perfiles || [];
 
     // Modal events
     userModal.addEventListener('hidden.bs.modal', e => {
@@ -345,7 +345,7 @@ const onUserFilter = async () => {
     if (erroGet)
         return console.warn(msgGet);
 
-    users.value = usuarios;
+    users.value = usuarios || [];
 }
 
 const onUserCreate = async () => {
@@ -357,7 +357,7 @@ const onUserCreate = async () => {
     if (errorGet)
         return console.warn(msgGet);
 
-    users.value = usuarios;
+    users.value = usuarios || [];
     hideModal();
 
     Swal.fire({
@@ -380,7 +380,7 @@ const onUserUpdate = async () => {
     if (errorGet)
         return console.warn(msgGet);
 
-    users.value = usuarios;
+    users.value = usuarios || [];
     hideModal();
 
     Swal.fire({
@@ -439,7 +439,7 @@ const updateStatus = async ({ currentTarget }) => {
         if (errorGet)
             return console.warn(msgGet);
 
-        users.value = usuarios;
+        users.value = usuarios || [];
         emptyUser();
     });
 }
@@ -480,7 +480,7 @@ const onUserDelete = async ({ currentTarget }) => {
         if (errorGet)
             return console.warn(msgGet);
 
-        users.value = usuarios;
+        users.value = usuarios || [];
     });
 
 }
