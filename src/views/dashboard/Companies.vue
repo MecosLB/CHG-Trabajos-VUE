@@ -10,7 +10,7 @@
             </div>
 
             <div class="actions-companies">
-                <div class="col-sm-12 col-md-12 col-lg-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                     <nav aria-label="Pagination">
                         <ul class="pagination mb-0">
                             <li class="page-item m-1" v-if="pagination.page > 1">
@@ -29,7 +29,7 @@
                     </nav>
                 </div>
 
-                <div class="col-sm-12 col-md-12 col-lg-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                     <div class="input-group">
                         <span class="input-group-text" id="buscar">
                             <i class="fa-solid fa-magnifying-glass"></i>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-12 col-lg-4">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                     <div class="d-flex align-items-center justify-content-end">
                         <button type="button" class="btn btn-sm btn-outline-primary rounded-5 w-auto"
                             data-bs-toggle="modal" data-bs-target="#modalCompany"
@@ -59,7 +59,7 @@
 
             <div class="grid-companies">
                 <div v-if="companies.length > 0" v-for="company in companies" :key="company.id"
-                    class="col-sm-12 col-md-12 col-lg-6 p-2">
+                    class="col-12 col-sm-12 col-md-12 col-lg-6 p-2">
                     <div class="card">
                         <div class="d-flex flex-row align-items-center justify-content-end p-2">
                             <div class="dropdown">
@@ -102,13 +102,13 @@
                         </div>
 
                         <div class="container-card animate__animated animate__fadeIn">
-                            <div class="col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
                                 <img :id="company.id" :src="`logotipos/${company.id}.png`"
                                     class="img-fluid p-2 rounded-5" :alt="company.nombre" :title="company.nombre"
                                     @error="setDefaultLogotipo(company.id)">
                             </div>
 
-                            <div class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                 <div class="d-flex flex-column pb-md-3">
                                     <ul class="list-group">
                                         <li class="list-group-item title">

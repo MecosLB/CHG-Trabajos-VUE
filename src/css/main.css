@@ -40,6 +40,12 @@
     background-color: var(--main-white);
 }
 
+@media only screen and (max-width: 992px) {
+    .container-content {
+        min-width: calc(100% - 250px);
+    }
+}
+
 .loader-view {
     height: calc(100vh - 100px);
     display: flex;

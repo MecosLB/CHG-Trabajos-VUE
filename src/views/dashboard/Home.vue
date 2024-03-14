@@ -170,7 +170,6 @@ const vacancies = ref([]);
 
 onMounted(async () => {
     const res = await validateSession();
-    console.log('home', res);
     const { error } = res;
     if (error) { 
         router.push({ name: 'auth' })
