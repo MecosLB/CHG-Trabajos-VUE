@@ -1,8 +1,22 @@
 @import url(../variables.css);
 
 // Vacancies
+$red: #dc3545;
+$yellow: #F4D03F;
 
 #vacancies {
+    .red {
+        color: $red;
+    }
+
+    .yellow {
+        color: $yellow;
+    }
+
+    .green {
+        color: var(--main-green);
+    }
+
     .vacancie.card {
         overflow: hidden;
         flex-direction: row;
@@ -22,28 +36,28 @@
         }
 
         &.suspended {
-            border-color: #F4D03F;
+            border-color: $yellow;
 
             .status {
-                background-color: #F4D03F;
+                background-color: $yellow;
                 color: #fff;
             }
 
             .title {
-                color: #F4D03F;
+                color: $yellow;
             }
         }
 
         &.ended {
-            border-color: #dc3545;
+            border-color: $red;
 
             .status {
-                background-color: #dc3545;
+                background-color: $red;
                 color: #fff;
             }
 
             .title {
-                color: #dc3545;
+                color: $red;
             }
         }
 
@@ -108,7 +122,14 @@
         }
 
         .candidates {
+            flex-direction: column;
             border-right: 1px dashed rgba(#000, 0.3);
+            font-weight: 500;
+
+            strong {
+                font-size: 1rem;
+                font-weight: 700;
+            }
         }
     }
 }

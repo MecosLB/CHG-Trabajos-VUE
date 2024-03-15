@@ -1,4 +1,13 @@
 @import url(../variables.css);
+#vacancies .red {
+  color: #dc3545;
+}
+#vacancies .yellow {
+  color: #F4D03F;
+}
+#vacancies .green {
+  color: var(--main-green);
+}
 #vacancies .vacancie.card {
   overflow: hidden;
   flex-direction: row;
@@ -85,7 +94,13 @@
   border-right: 1px dashed rgba(0, 0, 0, 0.3);
 }
 #vacancies .vacancie.card .candidates {
+  flex-direction: column;
   border-right: 1px dashed rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+}
+#vacancies .vacancie.card .candidates strong {
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 /*# sourceMappingURL=vacancies.css.map */

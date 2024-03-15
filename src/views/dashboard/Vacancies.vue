@@ -50,10 +50,22 @@
                         </span>
 
                         <span class="col-2 text-center candidates">
-                            {{ candidatos }}<br>
-                            {{ candidatosPorRevisar }} por revisar
+                            <strong :class="candidatos === '0' ? 'red' : 'green'">{{ `${candidatos} ${candidatos === '1'
+            ?
+            'candidato' :
+            'candidatos'}` }}</strong>
+                            {{ `${candidatosPorRevisar !== '0' ? `${candidatosPorRevisar} por revisar` : ''}` }}
                         </span>
-                        <span class="col-2 options bg-warning">{{ empresa }}</span>
+
+                        <span class="col-2 options">
+                            <button class="btn btn-sm btn-outline-primary rounded-1">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <!-- <button class="btn btn-sm btn-outline-primary rounded-1" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button> -->
+                        </span>
                     </article>
 
                 </div>
