@@ -1,7 +1,12 @@
 import axios from 'axios';
 
 export const getReports = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return { error: true, mensaje: '' }; 
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     const url = 'https://bolsa-testing.puntochg.com/api/reportes/inicio/';
     const { data } = await axios.post(url, formData);
@@ -9,7 +14,12 @@ export const getReports = async () => {
 }
 
 export const getVacancies = async (pagination = {}, filters = {}) => {
+    const token = localStorage.getItem('token');
+    if (!token) return { error: true, mensaje: '' }; 
+
     const formData = new FormData();
+
+    formData.append('token', token);
 
     if (Object.keys(pagination).length > 0) {
         formData.append('pagina', pagination.page);

@@ -76,7 +76,7 @@ const errorMessage = ref('');
 
 const loginForm = ref({
     email: 'sistemas.ceachege@gmail.com',
-    password: 'puntochg!'
+    password: '123'
 });
 
 onMounted(async () => {

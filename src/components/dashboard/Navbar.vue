@@ -40,10 +40,17 @@ const nameCompany = ref('');
 const user = ref({});
 
 onMounted(async () => {
+    window.addEventListener('resize', resizeSideBar(), true);
     await setInfo();
 });
 
-const setInfo = () => {
+const resizeSideBar = () => {
+    if ( window.matchMedia('(min-width: 992px)') ) {
+        btnSideBar();
+    }
+}
+
+const setInfo = async () => {
     const company = JSON.parse(localStorage.getItem('company'));
     const { id, name } = company;
     nameCompany.value = name;
