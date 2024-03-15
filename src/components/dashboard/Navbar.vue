@@ -1,21 +1,25 @@
 <template>
     <div class="navbar sticky-top">
         <div class="btn-sidebar d-flex flex-row align-items-center justify-content-between gap-2">
-            <button type="button" class="btn btn-sm btn-outline-primary rounded-5" @click="btnSideBar">
+            <button type="button" class="btn btn-outline-primary rounded-5" @click="btnSideBar">
                 <i id="iBtnSideBar" class="fa-solid fa-arrow-left-long"></i>
             </button>
-
-            <strong> {{ nameCompany }} </strong>
         </div>
 
-        <div class="btn-user">
+        <div class="btn-user d-flex align-items-center">
             <div class="btn-group dropstart">
-                <button type="button" title="Usuario" class="btn btn-sm btn-outline-primary rounded-5"
+                <button type="button" title="Usuario" class="btn btn-outline-primary rounded-5"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-user-tie me-2"></i>
-                    <span> {{ user.name }} </span>
+                    <i class="fa-solid fa-building-user"></i>
+                    {{ user.name }}
                 </button>
                 <ul class="dropdown-menu">
+                    <li class="dropdown-item dropdown-item-user">
+                        <span class="fw-bold"> Perfil: </span> {{ user.profile }}
+                    </li>
+                    <li class="dropdown-item dropdown-item-user">
+                        <span class="fw-bold"> Empresa: </span> {{ nameCompany }}
+                    </li>
                     <li>
                         <a class="dropdown-item" href="#" @click="signOff">
                             <i class="fa-solid fa-power-off me-1"></i> Cerrar Sesión
@@ -56,6 +60,7 @@ const setInfo = async () => {
     nameCompany.value = name;
 
     user.value = JSON.parse(localStorage.getItem('user'))
+    document.title = `Dashboard | ${nameCompany.value}`;
 }
 
 const signOff = async () => {

@@ -26,12 +26,12 @@
                     <span> Candidatos </span>
                 </router-link>
 
-                <router-link class="list-group-item list-group-item-action" :to="{ name: 'companies' }">
+                <router-link v-if="profile == 'Super Administrador'" class="list-group-item list-group-item-action" :to="{ name: 'companies' }">
                     <i class="fa-solid fa-building me-2"></i>
                     <span> Empresas </span>
                 </router-link>
 
-                <router-link class="list-group-item list-group-item-action" :to="{ name: 'users' }">
+                <router-link v-if="profile == 'Super Administrador'" class="list-group-item list-group-item-action" :to="{ name: 'users' }">
                     <i class="fa-solid fa-users me-2"></i>
                     <span> Usuarios </span>
                 </router-link>
@@ -45,9 +45,13 @@ import { onMounted, ref } from 'vue';
 
 const nameCompany = ref('');
 const logoCompany = ref('logotipos/default.png');
+const profile = ref('');
 
 onMounted(async () => {
     await setInfo();
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    profile.value = user.profile;
 });
 
 const setInfo = async () => {

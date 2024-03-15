@@ -20,7 +20,6 @@ import { validateLanding } from '@/helpers/auth/';
 const props = defineProps([ 'landing' ]);
 
 onMounted(async () => {
-    const company = localStorage.getItem('company');
     const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
 
@@ -34,12 +33,21 @@ onMounted(async () => {
 });
 
 const redirect = async () => {
-    const landing = props.landing; 
-    const data = { landing };
-    const res = await validateLanding(data);
-    const { error, mensaje } = res;
-    if (!error) router.push({ name: 'auth' })
-    else router.push({ name: 'not-found' })
+    let landing = props.landing;
+    if (!landing) {
+        const company = localStorage.getItem('company');
+        if (!company) {
+            router.push({ name: 'auth' })
+        } else {
+            router.push({ name: 'not-found' })
+        }
+    } else {
+        const data = { landing };
+        const res = await validateLanding(data);
+        const { error, mensaje } = res;
+        if (!error) router.push({ name: 'auth' })
+        else router.push({ name: 'not-found' })
+    }
 }
 </script>
 

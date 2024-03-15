@@ -44,3 +44,7 @@
     box-shadow: none;
     color: var(--main-white);
 }
+
+.dropdown-item-user {
+    font-weight: normal !important;
+}
