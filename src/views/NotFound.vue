@@ -10,6 +10,8 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
 import Loader from '@/components/Loader.vue';
+
+document.title = `Dashboard | Not Found`;
 </script>
 
 <style scoped>

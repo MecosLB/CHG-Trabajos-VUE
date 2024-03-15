@@ -162,6 +162,10 @@ const candidates = ref(0);
 const chartCandidates = ref({});
 const chartVacancies = ref({});
 const dataReport = ref([]);
+const pagination = ref({
+    page: 1,
+    results: 5,
+});
 const loader = ref(true);
 const monthCandidates = ref('');
 const monthVacancies = ref('');
@@ -231,7 +235,7 @@ const reports = async () => {
 }
 
 const setVacancies = async () => {
-    const res = await getVacancies();
+    const res = await getVacancies(pagination.value);
     
     if (res.error) {
         showAlert({ 

@@ -24,10 +24,7 @@ onMounted(async () => {
     const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
 
-    if (company) {
-        router.push({ name: 'auth' });
-        return;
-    } else if (user && token) {
+    if (user && token) {
         router.push({ name: 'dashboard' });
         return;
     } else {

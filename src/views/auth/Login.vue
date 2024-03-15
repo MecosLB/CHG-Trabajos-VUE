@@ -4,8 +4,8 @@
             <div class="card rounded-5">
                 <div class="p-2">
                     <div class="container-login">
-                        <div class="col-sm-12 col-md-4 img-login">
-                            <img :src="`logotipos/${infoCompany.id}.png`" class="img-fluid rounded-5" alt="Logotipo">
+                        <div class="col-sm-12 col-md-6 img-login">
+                            <img :src="`logotipos/${infoCompany.id}.png`" class="img-fluid rounded-5" :alt="infoCompany.name" :title="infoCompany.name">
                         </div>
 
                         <div class="col-sm-12 col-md-8">
@@ -23,7 +23,7 @@
                                                 Correo
                                             </label>
                                             <input type="email" class="form-control" id="email" placeholder=""
-                                                v-model="loginForm.email">
+                                                autocomplete="off" v-model="loginForm.email">
                                             <small id="email-error" class="error-form"> {{ errorMessage }} </small>
                                         </div>
                                     </div>
@@ -35,7 +35,7 @@
                                                 Contraseña
                                             </label>
                                             <input type="password" class="form-control" id="password" placeholder=""
-                                                v-model="loginForm.password">
+                                                autocomplete="off" v-model="loginForm.password">
                                             <small id="password-error" class="error-form"> {{ errorMessage }} </small>
                                         </div>
                                     </div>
@@ -75,8 +75,8 @@ const loader = ref(false);
 const errorMessage = ref('');
 
 const loginForm = ref({
-    email: 'sistemas.ceachege@gmail.com',
-    password: '123'
+    email: '',
+    password: ''
 });
 
 onMounted(async () => {
@@ -89,6 +89,8 @@ const company = async () => {
     const { error, company } = res;
     if (error) router.push({ name: 'not-found' })
     else infoCompany.value = JSON.parse(company);
+
+    document.title = `Dashboard | ${infoCompany.value.name}`;
 };
 
 const hideError = (conf) => {
@@ -149,16 +151,19 @@ const validateLogin = async () => {
     const user = loginForm.value;
 
     if (user.email == '') {
+        loader.value = false;
         setError({ field: 'email', message: 'Error: Campo requerido.' })
         return;
     }
 
     if (!validateEmail(user.email)) {
+        loader.value = false;
         setError({ field: 'email', message: 'Error: Correo invalido.' })
         return;
     }
 
     if (user.password == '') {
+        loader.value = false;
         setError({ field: 'password', message: 'Error: Campo requerido.' })
         return;
     }
