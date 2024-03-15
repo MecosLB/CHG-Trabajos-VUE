@@ -1,10 +1,12 @@
 import axios from "axios";
 
 export const createDepartment = async ({ idEmpresa, nombre }) => {
+    const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append('idEmpresa', idEmpresa);
     formData.append('estatus', 'Activo');
     formData.append('nombre', nombre);
+    formData.append('token', token);
 
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/departamentos/crear/', formData);
@@ -15,12 +17,14 @@ export const createDepartment = async ({ idEmpresa, nombre }) => {
 }
 
 export const getDepartments = async ({ estatus = '', nombre = '' }) => {
+    const token = localStorage.getItem('token');
     const formData = new FormData();
     const filtersObj = {
         estatus: estatus,
         nombre: nombre,
     }
     formData.append('filtros', JSON.stringify(filtersObj));
+    formData.append('token', token);
 
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/departamentos/consultar/', formData);
@@ -31,11 +35,13 @@ export const getDepartments = async ({ estatus = '', nombre = '' }) => {
 }
 
 export const updateDepartment = async ({ id, idEmpresa, estatus, nombre }) => {
+    const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append('idDepartamento', id);
     formData.append('idEmpresa', idEmpresa);
     formData.append('estatus', estatus);
     formData.append('nombre', nombre);
+    formData.append('token', token);
 
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/departamentos/actualizar/', formData);
@@ -46,9 +52,11 @@ export const updateDepartment = async ({ id, idEmpresa, estatus, nombre }) => {
 }
 
 export const deleteDepartment = async ({ id, idEmpresa }) => {
+    const token = localStorage.getItem('token');
     const formData = new FormData();
     formData.append('idDepartamento', id);
     formData.append('idEmpresa', idEmpresa);
+    formData.append('token', token);
 
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/departamentos/eliminar/', formData);
