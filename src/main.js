@@ -13,16 +13,19 @@ import 'animate.css';
 /* Main */
 import './css/main.css';
 
+/* Footer */
+import './css/footer.css';
+
 /* Auth */
 import './css/auth/login.css';
 import './css/auth/layout.css';
-import './css/dashboard/companies.css';
-import './css/dashboard/candidates.css';
-import './css/dashboard/vacancies.css';
 
 /* Dashboard */
 import './css/dashboard/home.css';
 import './css/dashboard/navbar.css';
+import './css/dashboard/companies.css';
+import './css/dashboard/candidates.css';
+import './css/dashboard/vacancies.css';
 
 
 createApp(App).use(store).use(router).mount('#app');

@@ -17,6 +17,10 @@
     justify-content: center;
 }
 
+.img-login {
+    text-align: center;
+}
+
 .header {
     text-align: center;
 }
@@ -31,9 +35,22 @@
     color: var(--main-blue);
 }
 
-.form-control:focus {
-    border-color: #DEE2E6;
+#login .form-control {
+    border-color: #8492BE;
+}
+
+#login .form-control:focus {
+    border-color: #8492BE;
     box-shadow: none;
+}
+
+.form-error {
+    border-color: #C70039;
+}
+
+.form-error:focus {
+    border-color: #C70039;
+    box-shadow: 0 0 0 0.25rem rgba(199, 0, 57, 0.10);
 }
 
 .loader-login {
@@ -65,4 +82,8 @@
     .card-body .header {
         margin-bottom: 20px;
     }
+
+    #login [class*='col-'] {
+        width: 100%;
+      }
 }

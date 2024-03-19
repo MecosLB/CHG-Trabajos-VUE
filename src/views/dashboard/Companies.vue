@@ -14,14 +14,14 @@
                     <nav aria-label="Pagination">
                         <ul class="pagination mb-0">
                             <li class="page-item m-1" v-if="pagination.page > 1">
-                                <button type="button" class="btn btn-sm btn-outline-primary rounded-5"
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-3"
                                     @click="previous">
                                     <i class="fa-solid fa-chevron-left"></i>
                                 </button>
                             </li>
 
                             <li class="page-item m-1" v-if="pagination.page < totalPages">
-                                <button type="button" class="btn btn-sm btn-outline-primary rounded-5" @click="next">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-3" @click="next">
                                     <i class="fa-solid fa-chevron-right"></i>
                                 </button>
                             </li>
@@ -41,7 +41,7 @@
 
                 <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                     <div class="d-flex align-items-center justify-content-end">
-                        <button type="button" class="btn btn-sm btn-outline-primary rounded-5 w-auto"
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-3 w-auto"
                             data-bs-toggle="modal" data-bs-target="#modalCompany"
                             @click="modalCompany({ action: 'Nuevo' })">
                             <i class="fa-solid fa-plus me-1"></i>
@@ -104,7 +104,7 @@
                         <div class="container-card animate__animated animate__fadeIn">
                             <div class="col-12 col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
                                 <img :id="company.id" :src="`logotipos/${company.id}.png`"
-                                    class="img-fluid p-2 rounded-5" :alt="company.nombre" :title="company.nombre"
+                                    class="img-fluid p-2 rounded-3" :alt="company.nombre" :title="company.nombre"
                                     @error="setDefaultLogotipo(company.id)">
                             </div>
 
@@ -379,8 +379,8 @@ const pagination = ref({
 });
 const searchForm = ref('');
 const statusOptions = ref([
-    { value: 'Activo', label: 'Activar' },
-    { value: 'Suspendido', label: 'Suspender' }
+    { value: 'Activo', label: 'Activa' },
+    { value: 'Suspendido', label: 'Suspedida' }
 ]);
 const showMessageCompanies = ref(false);
 const totalPages = ref(1);
@@ -722,7 +722,7 @@ const setError = (conf) => {
 }
 
 const setInfoCompany = (company) => {
-    const { id, nombre, landing, correo, telefono, direccion } = company;
+    const { estatus, id, nombre, landing, correo, telefono, direccion } = company;
 
     const form = companyForm.value;
 
@@ -745,6 +745,7 @@ const setInfoCompany = (company) => {
     const estado = temp[5];
 
     companyId.value = id;
+    form.estatus = estatus;
     form.nombre = nombre;
     form.landing = landing;
     form.correo = correo;
@@ -847,4 +848,4 @@ const validateForm = () => {
 
     return { error: false, message: '', field: '' }
 }
-</script>@/helpers/dashboard/companies
+</script>

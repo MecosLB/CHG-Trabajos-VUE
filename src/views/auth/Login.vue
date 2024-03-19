@@ -5,7 +5,8 @@
                 <div class="p-2">
                     <div class="container-login">
                         <div class="col-sm-12 col-md-6 img-login">
-                            <img :src="`logotipos/${infoCompany.id}.png`" class="img-fluid rounded-5" :alt="infoCompany.name" :title="infoCompany.name">
+                            <img :src="`logotipos/${infoCompany.id}.png`" class="img-fluid rounded-4"
+                                :alt="infoCompany.name" :title="infoCompany.name">
                         </div>
 
                         <div class="col-sm-12 col-md-8">
@@ -23,7 +24,8 @@
                                                 Correo
                                             </label>
                                             <input type="email" class="form-control" id="email" placeholder=""
-                                                autocomplete="off" v-model="loginForm.email">
+                                                autocomplete="off" v-model="loginForm.email" @change="changeEmail"
+                                                @keyup.enter="validateLogin">
                                             <small id="email-error" class="error-form"> {{ errorMessage }} </small>
                                         </div>
                                     </div>
@@ -35,7 +37,8 @@
                                                 Contraseña
                                             </label>
                                             <input type="password" class="form-control" id="password" placeholder=""
-                                                autocomplete="off" v-model="loginForm.password">
+                                                autocomplete="off" v-model="loginForm.password" @change="changePassword"
+                                                @keyup.enter="validateLogin">
                                             <small id="password-error" class="error-form"> {{ errorMessage }} </small>
                                         </div>
                                     </div>
@@ -90,11 +93,63 @@ const company = async () => {
     if (error) router.push({ name: 'not-found' })
     else infoCompany.value = JSON.parse(company);
 
-    document.title = `Dashboard | ${infoCompany.value.name}`;
+    document.title = `Bolsa de Trabajo | ${infoCompany.value.name}`;
 };
+
+const changeEmail = () => {
+    hideError({
+        field: 'email'
+    });
+
+    const form = loginForm.value;
+    const email = form.email;
+
+    if (email == '') {
+        setError({
+            field: 'email',
+            message: 'Error: Campo Requerido.'
+        });
+
+        return;
+    }
+
+    if (!validateEmail(email)) {
+        setError({
+            field: 'email',
+            message: 'Error: Correo Invalido.'
+        });
+        
+        return;
+    }
+}
+
+const changePassword = () => {
+    hideError({
+        field: 'password'
+    });
+
+    const form = loginForm.value;
+    const password = form.password;
+
+    if (password == '') {
+        setError({
+            field: 'password',
+            message: 'Error: Campo Requerido.'
+        });
+
+        return;
+    }
+}
 
 const hideError = (conf) => {
     const { field } = conf;
+
+    const input = document.getElementById(`${field}`);
+    input.focus();
+
+    const inputClass = input.classList;
+    if (inputClass.contains('form-error')) inputClass.toggle('form-error');
+
     const small = document.getElementById(`${field}-error`);
     small.style.display = 'none';
 }
@@ -122,6 +177,9 @@ const setError = (conf) => {
 
     const input = document.getElementById(`${field}`);
     input.focus();
+
+    const inputClass = input.classList;
+    if (!inputClass.contains('form-error')) inputClass.toggle('form-error');
 
     const small = document.getElementById(`${field}-error`);
     small.style.display = 'block';

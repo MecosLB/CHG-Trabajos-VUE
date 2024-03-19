@@ -11,7 +11,7 @@
 import Footer from '@/components/Footer.vue';
 import Loader from '@/components/Loader.vue';
 
-document.title = `Dashboard | Not Found`;
+document.title = `Bolsa de Trabajo | Not Found`;
 </script>
 
 <style scoped>

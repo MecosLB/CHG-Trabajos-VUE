@@ -46,14 +46,7 @@ const user = ref({});
 
 onMounted(async () => {
     await setInfo();
-    window.addEventListener('resize', resizeSideBar(), true);
 });
-
-const resizeSideBar = () => {
-    if (window.matchMedia('(max-width: 992px)')) {
-        btnSideBar();
-    }
-}
 
 const setInfo = async () => {
     const company = JSON.parse(localStorage.getItem('company'));
@@ -61,7 +54,7 @@ const setInfo = async () => {
     nameCompany.value = name;
 
     user.value = JSON.parse(localStorage.getItem('user'))
-    document.title = `Dashboard | ${nameCompany.value}`;
+    document.title = `Bolsa de Trabajo | ${nameCompany.value}`;
 }
 
 const signOff = async () => {
