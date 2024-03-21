@@ -8,8 +8,32 @@
 #vacancies .green {
   color: var(--main-green);
 }
+#vacancies .ql-container {
+  height: 250px;
+}
+#vacancies .btn-add {
+  font-size: 1rem;
+  color: var(--main-green);
+  background-color: transparent;
+  border: 1px solid var(--main-green);
+  border-radius: 100%;
+  transition: all 0.2s ease-in-out;
+}
+#vacancies .btn-add:hover, #vacancies .btn-add:focus {
+  color: #fff;
+  background-color: var(--main-green);
+}
+#vacancies .btn-add.solid {
+  font-size: 0.8rem;
+  color: #fff;
+  background-color: var(--main-green);
+  padding: 0 4px;
+}
+#vacancies .btn-add.solid:hover, #vacancies .btn-add.solid:focus {
+  color: var(--main-green);
+  background-color: transparent;
+}
 #vacancies .vacancie.card {
-  overflow: hidden;
   flex-direction: row;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
@@ -42,6 +66,16 @@
 }
 #vacancies .vacancie.card.ended .title {
   color: #dc3545;
+}
+#vacancies .vacancie.card.paused {
+  border-color: rgba(0, 0, 0, 0.3);
+}
+#vacancies .vacancie.card.paused .status {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+#vacancies .vacancie.card.paused .title {
+  color: rgba(0, 0, 0, 0.3);
 }
 #vacancies .vacancie.card .info {
   display: flex;
@@ -80,6 +114,7 @@
   text-align: center;
   writing-mode: vertical-lr;
   transform: rotate(180deg);
+  border-radius: 0 0.375rem 0.375rem 0;
 }
 #vacancies .vacancie.card .date,
 #vacancies .vacancie.card .candidates,

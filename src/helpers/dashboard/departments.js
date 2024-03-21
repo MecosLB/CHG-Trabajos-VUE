@@ -16,15 +16,14 @@ export const createDepartment = async ({ idEmpresa, nombre }) => {
     }
 }
 
-export const getDepartments = async ({ estatus = '', nombre = '' }) => {
-    const token = localStorage.getItem('token');
+export const getDepartments = async ({ estatus = '', nombre = '', idEmpresa = '' }) => {
     const formData = new FormData();
     const filtersObj = {
         estatus: estatus,
         nombre: nombre,
+        idEmpresa: idEmpresa,
     }
     formData.append('filtros', JSON.stringify(filtersObj));
-    formData.append('token', token);
 
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/departamentos/consultar/', formData);

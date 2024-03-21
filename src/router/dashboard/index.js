@@ -16,6 +16,12 @@ export default {
             component: () => import(/* webpackChunkName: "Vacancies" */ '@/views/dashboard/Vacancies.vue'),
         },
         {
+            path: 'vacancies/:vacancieId',
+            name: 'vacancie',
+            component: () => import(/* webpackChunkName: "Vacancie" */ '@/views/dashboard/Vacancie.vue'),
+            props: true,
+        },
+        {
             path: 'departaments',
             name: 'departaments',
             component: () => import(/* webpackChunkName: "Departaments" */ '@/views/dashboard/Departaments.vue'),
