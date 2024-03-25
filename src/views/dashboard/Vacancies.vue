@@ -36,7 +36,7 @@
 
                 <div v-if="vacancies.length"
                     v-for="{ id, estatus, titulo, departamento, empresa, direccion, ultimaActualizacion, nombreUsuario, fechaCaducidad, candidatos, candidatosPorRevisar } of vacancies"
-                    class="col-12 py-2" :key="id">
+                    class="col-12 py-2 animate__animated animate__fadeIn" :key="id">
 
                     <article :class="`vacancie card row shadow-sm ${statusClass[estatus]}`">
                         <div class="col-5 info">
@@ -96,7 +96,7 @@
         <VacancieModal :isSuperAdmin="isSuperAdmin" :departments="departments" :companies="companies"
             :displayDepartments="displayDepartments" :vacancieTitle="vacancieTitle" :activeVacancie="activeVacancie"
             :modalVacancie="modalVacancie" :updateContent="updateContent" :questions="questions"
-            :addQuestion="addQuestion" />
+            :addQuestion="addQuestion" :deleteQuestion="deleteQuestion" />
     </section>
 </template>
 
@@ -334,6 +334,17 @@ const addQuestion = (questionType) => {
 
     // Empty fields
     questionTextDOM.value = '';
+}
+
+const deleteQuestion = (questionIndex = 0) => {
+    let questions = activeVacancie.value.additionalQuestion;
+
+    if (!questions.length) return;
+
+    activeVacancie.value = {
+        ...activeVacancie.value,
+        additionalQuestion: [...questions.filter((question, index) => index !== questionIndex)]
+    }
 }
 
 // General functions

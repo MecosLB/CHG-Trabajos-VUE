@@ -200,6 +200,11 @@
                                                 {{ valor }},
                                             </template>
                                         </template>
+
+                                        <button @click="deleteQuestion(index)"
+                                            class="btn btn-sm btn-danger rounded-5 ms-2">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </button>
                                     </p>
                                 </template>
                             </div>
@@ -224,7 +229,7 @@ import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { ref } from 'vue';
 
-const props = defineProps(['isSuperAdmin', 'departments', 'companies', 'displayDepartments', 'vacancieTitle', 'activeVacancie', 'modalVacancie', 'updateContent', 'questions', 'addQuestion']);
+const props = defineProps(['isSuperAdmin', 'departments', 'companies', 'displayDepartments', 'vacancieTitle', 'activeVacancie', 'modalVacancie', 'updateContent', 'questions', 'addQuestion', 'deleteQuestion']);
 
 const answersNum = ref([1, 2]);
 const questionSelected = ref('');

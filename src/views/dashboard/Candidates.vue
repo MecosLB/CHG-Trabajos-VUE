@@ -55,7 +55,7 @@
 
                 <div v-if="candidates.length"
                     v-for="{ id, estatus, nombre, apellidos, fechaNacimiento, telefono, correo, direccion, tituloProfesional } of candidates"
-                    class="col-12 col-lg-6 col-xl-4 p-4" :key="id">
+                    class="col-12 col-lg-6 col-xl-4 p-4 animate__animated animate__fadeIn" :key="id">
                     <article :class="`candidate card shadow-sm p-2 ${statusClass[estatus]}`">
                         <div class="header d-flex align-items-center gap-3 mb-2">
                             <i class="icon fa-solid fa-circle-user"></i>

@@ -99,6 +99,23 @@
                         </button>
                     </div>
                     <div class="modal-body row needs-validation">
+                        <div v-if="isSuperAdmin() && deptTitle === 'Añadir'" class="col-12 mb-2">
+                            <label for="company" class="form-label">Empresa:</label>
+                            <select @change="onChangeInput" v-model="activeDept.idEmpresa"
+                                class="form-control form-control-sm" name="company">
+                                <option value="" selected>Seleccionar empresa...</option>
+
+                                <template v-if="companies.length">
+                                    <option v-for="{ id, nombre } of companies" :value="id">
+                                        {{ nombre }}
+                                    </option>
+                                </template>
+                            </select>
+                            <div class="invalid-feedback">
+                                Favor de seleccionar un empresa.
+                            </div>
+                        </div>
+
                         <div class="col-12 mb-2">
                             <label for="name" class="form-label">Departamento:</label>
                             <input @change="onChangeInput" type="text" v-model="activeDept.nombre"
@@ -126,12 +143,14 @@ import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
 import { createDepartment, getDepartments, updateDepartment, deleteDepartment } from '@/helpers/dashboard/departments';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
+import { getCompanies } from '@/helpers/dashboard/companies';
 
 const departments = ref([]),
+    companies = ref([]),
     deptTitle = ref('Añadir'),
     activeDept = ref({
         id: '',
-        idEmpresa: '4009fd7d-de5a-4997-8f63-e27d9c34ff34',
+        idEmpresa: '',
         estatus: '',
         nombre: '',
     }),
@@ -154,6 +173,9 @@ onMounted(async () => {
     const { departamentos } = await getDepartments({});
     departments.value = departamentos || [];
 
+    if (isSuperAdmin())
+        await displayCompanies();
+
     // Modal events
     deptModal.addEventListener('hidden.bs.modal', e => {
         const invalidInputsDOM = document.querySelectorAll('.is-invalid');
@@ -165,12 +187,8 @@ onMounted(async () => {
 
 // Ref functions
 const emptyDept = () => {
-    activeDept.value = {
-        ...activeDept.value,
-        id: '',
-        estatus: '',
-        nombre: '',
-    }
+    for (const key in activeDept.value)
+        activeDept.value[key] = '';
 }
 
 const updateTitle = ({ currentTarget }) => {
@@ -183,18 +201,29 @@ const updateTitle = ({ currentTarget }) => {
 const setActiveDept = (deptId) => {
     if (!deptId) return emptyDept();
 
-    const { id, estatus, nombre } = departments.value.filter(({ id }) => id === deptId)[0];
+    const { id, idEmpresa, estatus, nombre } = departments.value.find(({ id }) => id === deptId);
     activeDept.value = {
-        ...activeDept.value,
         id: id,
+        idEmpresa: idEmpresa,
         estatus: estatus,
         nombre: nombre,
     }
+}
+const displayCompanies = async () => {
+    const { error: erroGet, mensaje: msgGet, empresas } = await getCompanies({ page: 1, results: 30 }, { estatus: 'Activo' });
+    if (erroGet)
+        console.warn(msgGet);
+
+    companies.value = empresas || [];
 }
 
 // General functions
 const hideModal = () => {
     document.querySelector('.btn-close').click();
+}
+
+const isSuperAdmin = ({ profile } = JSON.parse(localStorage.user)) => {
+    return profile === 'Super Administrador';
 }
 
 const validateFields = () => {
@@ -254,11 +283,11 @@ const onDeptCreate = async () => {
         return console.warn(msgCreate);
 
     const { error: errorGet, mensaje: msgGet, departamentos = [] } = await getDepartments({});
-    if (errorGet)
-        return console.warn(msgGet);
-
     departments.value = departamentos || [];
     hideModal();
+
+    if (errorGet)
+        return console.warn(msgGet);
 
     Swal.fire({
         title: `<h3 class='fw-bold'>
@@ -277,11 +306,11 @@ const onDeptUpdate = async () => {
         return console.warn(msgUpdate);
 
     const { error: errorGet, mensaje: msgGet, departamentos = [] } = await getDepartments({});
-    if (errorGet)
-        return console.warn(msgGet);
-
     departments.value = departamentos || [];
     hideModal();
+
+    if (errorGet)
+        return console.warn(msgGet);
 
     Swal.fire({
         title: `<h3 class='fw-bold'>
@@ -377,10 +406,9 @@ const onDeptDelete = async ({ currentTarget }) => {
         });
 
         const { error: errorGet, mensaje: msgGet, departamentos = [] } = await getDepartments({});
+        departments.value = departamentos || [];
         if (errorGet)
             return console.warn(msgGet);
-
-        departments.value = departamentos || [];
     });
 
 }
