@@ -137,7 +137,7 @@ const pagination = ref({
 const totalPages = ref(1),
     loader = ref(true),
     loaderSearch = ref(true),
-    mensaje = ref('No se encontraron candidatos'),
+    mensaje = ref('No se encontraron vacantes'),
     vacancieTitle = ref('Añadir');
 
 const statusClass = {
@@ -154,12 +154,13 @@ let vacancieModal = null;
 
 onMounted(async () => {
     vacancieModal = document.getElementById('vacancieModal');
-    const { profile } = JSON.parse(localStorage.user)
-
     await displayVacancies();
 
-    if (profile === 'Super Administrador')
+    if (isSuperAdmin())
         await displayCompanies();
+
+    if (!isSuperAdmin())
+        await displayDepartments();
 
     loader.value = false;
 
@@ -207,7 +208,7 @@ const displayCompanies = async () => {
     companies.value = empresas || [];
 }
 
-const displayDepartments = async ({ target }) => {
+const displayDepartments = async ({ target = '' } = {}) => {
     let { id: selectedCompany } = JSON.parse(localStorage.company);
 
     if (isSuperAdmin())
@@ -227,7 +228,9 @@ const displayDepartments = async ({ target }) => {
 const emptyVacancie = () => {
     const quillEditor = document.querySelector('.ql-editor');
     quillEditor.innerHTML = '';
-    departments.value = [];
+
+    if (isSuperAdmin())
+        departments.value = [];
 
     for (const key in activeVacancie.value) {
         if (key === 'additionalQuestion') {

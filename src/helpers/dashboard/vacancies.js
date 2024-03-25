@@ -2,6 +2,7 @@ import axios from "axios";
 
 export const createVacancie = async ({ position, companyId, departmentId, description, salary, workHour, startDate, endDate, additionalQuestion }) => {
     const token = localStorage.getItem('token');
+    const { id: companyIdUser } = JSON.parse(localStorage.company);
     const formData = new FormData();
     const dataObj = {
         idDepartamento: departmentId,
@@ -15,7 +16,7 @@ export const createVacancie = async ({ position, companyId, departmentId, descri
         preguntas: JSON.stringify(additionalQuestion),
     }
 
-    formData.append('idEmpresa', companyId);
+    formData.append('idEmpresa', isSuperAdmin() ? companyId : companyIdUser);
     formData.append('datos', JSON.stringify(dataObj));
     formData.append('token', token);
 
@@ -28,6 +29,14 @@ export const createVacancie = async ({ position, companyId, departmentId, descri
 }
 
 export const getVacancies = async ({ page = 1, results = 6 }, filters = {}) => {
+    const { id: companyIdUser } = JSON.parse(localStorage.company);
+
+    if (!isSuperAdmin())
+        filters = {
+            ...filters,
+            idEmpresa: companyIdUser,
+        }
+
     const formData = new FormData();
     formData.append('pagina', page);
     formData.append('registrosPorPagina', results);
@@ -85,6 +94,10 @@ export const updateStatusVacancie = async ({ id }, status) => {
 }
 
 // General functions
+const isSuperAdmin = ({ profile } = JSON.parse(localStorage.user)) => {
+    return profile === 'Super Administrador';
+}
+
 const getCurrentDate = () => {
     const todayDate = new Date(),
         year = todayDate.getFullYear(),
