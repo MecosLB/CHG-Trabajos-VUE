@@ -20,7 +20,24 @@
                     </button>
                 </span>
 
-                <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary px-5 rounded-5 ms-auto"
+                <div v-if="isSuperAdmin()" class="company-filter input-group ms-auto">
+                    <span class="input-group-text">
+                        <i class="fa-solid fa-building"></i>
+                    </span>
+                    <select @change="displayVacancies" class="form-control form-control-sm rounded-5"
+                        v-model="filters.idEmpresa">
+                        <option value="">Seleccionar empresa...</option>
+
+                        <template v-if="companies.length">
+                            <option v-for="{ id, nombre } of companies" :value="id">
+                                {{ nombre }}
+                            </option>
+                        </template>
+                    </select>
+                </div>
+
+                <button @click="updateTitle"
+                    :class="`btn-main btn btn-sm btn-outline-primary px-5 rounded-5 ${isSuperAdmin() ? 'ms-3' : 'ms-auto'}`"
                     data-bs-toggle="modal" data-bs-target="#vacancieModal">
                     <i class="fa-solid fa-plus"></i> Agregar Vacante
                 </button>
@@ -120,6 +137,9 @@ const pagination = ref({
     page: 1,
     results: 5,
 }),
+    filters = ref({
+        idEmpresa: '',
+    }),
     activeVacancie = ref({
         id: '',
         position: '',
@@ -177,14 +197,19 @@ onMounted(async () => {
 const displayVacancies = async () => {
     loaderSearch.value = true;
 
-    const { error: erroGet, mensaje: msgGet, vacantes, totalPaginas } = await getVacancies({ ...pagination.value });
-    if (erroGet)
-        console.warn(msgGet);
+    const { idEmpresa } = filters.value;
+    const { error: erroGet, mensaje: msgGet, vacantes, totalPaginas } = await getVacancies({ ...pagination.value }, { ...filters.value });
 
     totalPages.value = totalPaginas || 1;
-    vacancies.value = vacantes || [];
 
-    // console.log(totalPaginas);
+    console.log(totalPaginas);
+
+    if (idEmpresa && Math.ceil(totalPages.value) < pagination.value.page) {
+        pagination.value.page = 1;
+        return await displayVacancies();
+    }
+
+    vacancies.value = vacantes || [];
 
     loaderSearch.value = false;
 }

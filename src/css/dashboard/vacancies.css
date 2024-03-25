@@ -11,6 +11,10 @@
 #vacancies .ql-container {
   height: 250px;
 }
+#vacancies .company-filter {
+  width: 250px;
+  max-width: 250px;
+}
 #vacancies .btn-add {
   font-size: 1rem;
   color: var(--main-green);

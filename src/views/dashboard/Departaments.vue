@@ -5,10 +5,17 @@
         </div>
 
         <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
-            <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary px-5 rounded-5"
-                data-bs-toggle="modal" data-bs-target="#deptModal">
-                <i class="fa-solid fa-plus"></i> Agregar Departamento
-            </button>
+            <div class="w-100 d-flex align-items-center justify-content-between">
+                <button v-if="filterDept.nombre || filterDept.estatus || filterDept.idEmpresa" @click="clearFilter"
+                    class="btn btn-sm btn-outline-danger px-5 rounded-5">
+                    <i class="fa-solid fa-trash"></i> Borrar Filtros
+                </button>
+
+                <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary px-5 rounded-5 ms-auto"
+                    data-bs-toggle="modal" data-bs-target="#deptModal">
+                    <i class="fa-solid fa-plus"></i> Agregar Departamento
+                </button>
+            </div>
 
             <table v-if="departments.length" class="table departments table-striped text-center align-middle">
                 <thead>
@@ -30,6 +37,33 @@
                                                 <option value="">Seleccionar...</option>
                                                 <option value="Activo">Activo</option>
                                                 <option value="Suspendido">Suspendido</option>
+                                            </select>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </th>
+                        <th v-if="isSuperAdmin()" scope="col">
+                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                Empresa
+                                <div class="dropend">
+                                    <button class="btn-icon" type="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="fa-solid fa-filter"></i>
+                                    </button>
+
+                                    <ul class="dropdown-menu p-2">
+                                        <li>
+                                            <label for="statusFilter">Empresa:</label>
+                                            <select @change="onDeptFilter" v-model="filterDept.idEmpresa"
+                                                class="form-control" name="statusFilter">
+                                                <option value="">Seleccionar...</option>
+
+                                                <template v-if="companies.length">
+                                                    <option v-for="{ id, nombre } of companies" :value="id">
+                                                        {{ nombre }}
+                                                    </option>
+                                                </template>
                                             </select>
                                         </li>
                                     </ul>
@@ -63,10 +97,13 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="{ id, estatus, nombre } of departments">
+                    <tr v-for="{ id, estatus, nombre, empresa='' } of departments">
                         <td class="fw-bold status-company">
                             <i :class="`fa-solid fa-circle-dot ${estatus === 'Activo' ? 'active' : 'suspend'}`"></i> {{
                 estatus }}
+                        </td>
+                        <td v-if="empresa && isSuperAdmin()" class="fw-bold">
+                            {{ empresa }}
                         </td>
                         <td class="fw-bold">
                             {{ nombre }}
@@ -157,6 +194,7 @@ const departments = ref([]),
     filterDept = ref({
         estatus: '',
         nombre: '',
+        idEmpresa: '',
     });
 
 const mensaje = ref("No existen departamentos registrados");
@@ -196,6 +234,21 @@ const updateTitle = ({ currentTarget }) => {
     deptTitle.value = isNewDept ? 'Añadir' : 'Editar';
 
     setActiveDept(currentTarget.getAttribute('deptId'));
+}
+
+const clearFilter = async () => {
+    filterDept.value = {
+        estatus: '',
+        nombre: '',
+        idEmpresa: '',
+    };
+
+    const { error: erroGet, mensaje: msgGet, departamentos = [] } = await getDepartments({ ...filterDept.value });
+
+    if (erroGet)
+        return console.warn(msgGet);
+
+    departments.value = departamentos || [];
 }
 
 const setActiveDept = (deptId) => {
@@ -253,9 +306,7 @@ const onDeptFilter = async () => {
     const { error: erroGet, mensaje: msgGet, departamentos = [] } = await getDepartments({ ...filterDept.value });
 
     if (!departamentos.length) {
-        const filterObj = filterDept.value;
-        filterObj.estatus = '';
-        filterObj.nombre = '';
+        await clearFilter();
 
         return Swal.fire({
             html: `<h3 class='fw-bold'>

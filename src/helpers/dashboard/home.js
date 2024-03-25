@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getReports = async () => {
     const token = localStorage.getItem('token');
-    if (!token) return { error: true, mensaje: '' }; 
+    if (!token) return { error: true, mensaje: '' };
 
     const formData = new FormData();
 
@@ -14,8 +14,15 @@ export const getReports = async () => {
 }
 
 export const getVacancies = async (pagination = {}, filters = {}) => {
+    const { id: companyIdUser } = JSON.parse(localStorage.company);
     const token = localStorage.getItem('token');
-    if (!token) return { error: true, mensaje: '' }; 
+    if (!token) return { error: true, mensaje: '' };
+
+    if (!isSuperAdmin())
+        filters = {
+            ...filters,
+            idEmpresa: companyIdUser,
+        }
 
     const formData = new FormData();
 
@@ -26,11 +33,16 @@ export const getVacancies = async (pagination = {}, filters = {}) => {
         formData.append('registrosPorPagina', pagination.results);
     }
 
-    if (Object.keys(filters).length ) {
+    if (Object.keys(filters).length) {
         formData.append('filtros', JSON.stringify(filters));
     }
 
     const url = 'https://bolsa-testing.puntochg.com/api/vacantes/consultar/';
     const { data } = await axios.post(url, formData);
     return data;
+}
+
+// General functions
+const isSuperAdmin = ({ profile } = JSON.parse(localStorage.user)) => {
+    return profile === 'Super Administrador';
 }
