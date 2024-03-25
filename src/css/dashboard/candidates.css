@@ -1,4 +1,7 @@
 @import url(../variables.css);
+#candidates .green {
+  color: var(--main-green);
+}
 #candidates .status-filter {
   width: 250px;
   max-width: 250px;
@@ -23,6 +26,20 @@
 #candidates .candidate.card.seen .fa-circle-user,
 #candidates .candidate.card.seen .status > i {
   color: rgba(0, 0, 0, 0.3);
+}
+#candidates .candidate.card.selected {
+  border-color: rgb(13, 110, 253);
+}
+#candidates .candidate.card.selected .fa-circle-user,
+#candidates .candidate.card.selected .status > i {
+  color: rgb(13, 110, 253);
+}
+#candidates .candidate.card.finalist {
+  border-color: #ffc107;
+}
+#candidates .candidate.card.finalist .fa-circle-user,
+#candidates .candidate.card.finalist .status > i {
+  color: #ffc107;
 }
 #candidates .candidate.card.discarded {
   border-color: #dc3545;

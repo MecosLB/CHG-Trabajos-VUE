@@ -3,6 +3,10 @@
 // Candidates
 
 #candidates {
+    .green {
+        color: var(--main-green);
+    }
+
     .status-filter {
         width: 250px;
         max-width: 250px;
@@ -31,6 +35,24 @@
             .fa-circle-user,
             .status>i {
                 color: rgba(#000, 0.3);
+            }
+        }
+
+        &.selected {
+            border-color: rgb(13, 110, 253);
+
+            .fa-circle-user,
+            .status>i {
+                color: rgb(13, 110, 253);
+            }
+        }
+
+        &.finalist {
+            border-color: #ffc107;
+
+            .fa-circle-user,
+            .status>i {
+                color: #ffc107;
             }
         }
 

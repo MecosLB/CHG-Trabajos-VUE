@@ -1,9 +1,12 @@
 import axios from "axios";
 
 export const createDepartment = async ({ idEmpresa, nombre }) => {
+    const { profile } = JSON.parse(localStorage.user);
+    const { id: companyId } = JSON.parse(localStorage.company);
+
     const token = localStorage.getItem('token');
     const formData = new FormData();
-    formData.append('idEmpresa', idEmpresa);
+    formData.append('idEmpresa', profile === 'Super Administrador' ? idEmpresa : companyId);
     formData.append('estatus', 'Activo');
     formData.append('nombre', nombre);
     formData.append('token', token);
@@ -16,15 +19,17 @@ export const createDepartment = async ({ idEmpresa, nombre }) => {
     }
 }
 
-export const getDepartments = async ({ estatus = '', nombre = '' }) => {
-    const token = localStorage.getItem('token');
+export const getDepartments = async ({ estatus = '', nombre = '', idEmpresa = '' }) => {
+    const { profile } = JSON.parse(localStorage.user);
+    const { id: companyId } = JSON.parse(localStorage.company);
+
     const formData = new FormData();
     const filtersObj = {
         estatus: estatus,
         nombre: nombre,
+        idEmpresa: profile === 'Super Administrador' ? idEmpresa : companyId,
     }
     formData.append('filtros', JSON.stringify(filtersObj));
-    formData.append('token', token);
 
     try {
         const { data } = await axios.post('https://bolsa-testing.puntochg.com/api/departamentos/consultar/', formData);

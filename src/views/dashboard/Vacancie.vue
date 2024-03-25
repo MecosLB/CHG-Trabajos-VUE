@@ -1,13 +1,54 @@
 <template>
     <section id="candidates" class="container-fluid">
-        <Breadcrumb :moduleName="'Candidatos'" class="mb-4" />
+        <Breadcrumb :moduleName="'Vacantes'" class="mb-4" />
+
+        <router-link class="btn btn-sm btn-outline-primary rounded-5 mb-4" :to="{ name: 'vacancies' }">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Regresar
+        </router-link>
 
         <div v-if="loader" class="loader-view">
             <Loader />
         </div>
 
         <template v-else>
-            <div class="d-flex align-items-center mb-4">
+            <div v-if="vacancie.length"
+                v-for="{ id, estatus, titulo, departamento, empresa, direccion, ultimaActualizacion, nombreUsuario, fechaCaducidad } of vacancie"
+                id="vacancies" class="py-2 animate__animated animate__fadeIn" :key="id">
+
+                <article :class="`vacancie card row shadow-sm ${statusVacancieClass[estatus]}`">
+                    <div class="col-7 info">
+                        <span class="status">
+                            <i class="fa-solid fa-circle-dot"></i>
+                            &nbsp;{{ estatus }}
+                        </span>
+
+                        <span class="d-flex flex-column h-100 overflow-hidden px-4 py-2">
+                            <h6 class="title">
+                                {{ titulo }}
+                            </h6>
+                            <p class="department">
+                                {{ departamento }}<br>
+                                {{ `${empresa} - ${getCity(direccion)}` }}
+                            </p>
+                            <small class="updated" v-if="ultimaActualizacion">
+                                Última actualización el {{ ultimaActualizacion }}
+                            </small>
+
+                            <small class="user">
+                                Publicada por {{ nombreUsuario }}
+                            </small>
+                        </span>
+                    </div>
+
+                    <span class="col-5 text-center date">
+                        Fecha de caducidad:<br>
+                        {{ getEndDate(fechaCaducidad) }}
+                    </span>
+                </article>
+            </div>
+
+            <div class="d-flex align-items-center my-4">
                 <span class="d-flex gap-2">
                     <button v-if="pagination.page > 1" type="button" class="btn btn-sm btn-outline-primary rounded-1"
                         @click="prevPage">
@@ -30,6 +71,8 @@
                             <option value="">Seleccionar estatus...</option>
                             <option value="Recibido">Recibido</option>
                             <option value="Visto">Visto</option>
+                            <option value="Seleccionado">Seleccionado</option>
+                            <option value="Finalista">Finalista</option>
                             <option value="Descartado">Descartado</option>
                         </select>
                     </div>
@@ -52,7 +95,6 @@
             </template>
 
             <div class="grid-candidates row justify-content-center align-items-start">
-
                 <div v-if="candidates.length"
                     v-for="{ id, estatus, nombre, apellidos, fechaNacimiento, telefono, correo, direccion, tituloProfesional } of candidates"
                     class="col-12 col-lg-6 col-xl-4 p-4 animate__animated animate__fadeIn" :key="id">
@@ -75,8 +117,10 @@
                                 </p>
                             </span>
 
-                            <CandidateOptions :candidateId="id" :candidateStatus="estatus" :setCvTitle="setCvTitle"
-                                :onCandidateDiscard="onCandidateDiscard" :onCandidateDelete="onCandidateDelete" />
+                            <CandidateVacancieOptions :candidateId="id" :candidateStatus="estatus"
+                                :setCvTitle="setCvTitle" :onCandidateDiscard="onCandidateDiscard"
+                                :onCandidateDelete="onCandidateDelete" :onCandidateSelect="onCandidateSelect"
+                                :onCandidateFinalist="onCandidateFinalist" />
                         </div>
 
                         <ul class="body list-group">
@@ -103,7 +147,6 @@
                 <article v-else class="col-12 alert alert-danger text-center fw-bold">
                     {{ mensaje }}
                 </article>
-
             </div>
         </template>
 
@@ -119,7 +162,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- <object data="" width="100%" height="500px"></object> -->
+                        <template v-if="answers.length">
+                            <h6>
+                                Respuestas:
+                            </h6>
+
+                            <p v-for="{ label, respuesta } in answers">
+                                <i class="fa-solid fa-circle-dot me-2 green"></i>
+                                <b class="fw-bold me-2">{{ label }}:</b>{{ respuesta }}
+                            </p>
+
+                            <hr>
+                        </template>
+
                         <embed src="" type="application/pdf" width="100%" height="500px">
                     </div>
                     <div class="modal-footer">
@@ -135,16 +190,21 @@
 <script setup>
 import Loader from '@/components/Loader.vue';
 import Breadcrumb from '@/components/dashboard/Breadcrumb.vue';
-import CandidateOptions from '@/components/dashboard/CandidateOptions.vue';
-import { deleteCandidate, discardCandidate, getCandidates, viewCandidate } from '@/helpers/dashboard/candidates';
+import CandidateVacancieOptions from '@/components/dashboard/CandidateVacancieOptions.vue';
+import { getCandidatesVacancie, viewCandidateVacancie, discardCandidateVacancie, deleteCandidateVacancie, selectCandidateVacancie, finalistCandidateVacancie } from '@/helpers/dashboard/candidatesVacancie';
+import { getVacancies } from '@/helpers/dashboard/vacancies';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
+
+const props = defineProps(['vacancieId']);
 
 const candidates = ref([]);
 const pagination = ref({
     page: 1,
     results: 6,
 }),
+    vacancie = ref([]),
+    answers = ref([]),
     filters = ref({
         estatus: '',
         nombre: '',
@@ -159,8 +219,16 @@ const totalPages = ref(1),
 const statusClass = {
     'Recibido': 'received',
     'Visto': 'seen',
+    'Seleccionado': 'selected',
+    'Finalista': 'finalist',
     'Descartado': 'discarded',
-}
+},
+    statusVacancieClass = {
+        'Activo': 'active',
+        'Suspendido': 'suspended',
+        'Finalizado': 'ended',
+        'Pendiente': 'paused',
+    }
 const customClass = {
     confirmButton: 'btn btn-sm btn-outline-primary rounded-1',
     cancelButton: 'btn btn-sm btn-outline-primary rounded-1'
@@ -170,6 +238,16 @@ const customClass = {
 const baseUrl = 'https://bolsa-testing.puntochg.com';
 
 onMounted(async () => {
+    window.scrollTo(0, 0);
+
+    // Get current vacancie
+    const { error: errorGet, mensaje: msgGet, vacantes } = await getVacancies({}, { id: props.vacancieId });
+    if (errorGet)
+        console.warn(msgGet);
+
+    vacancie.value = vacantes;
+
+    // Get that vacancie's candidates
     await displayCandidates();
     loader.value = false;
 });
@@ -179,7 +257,7 @@ const displayCandidates = async () => {
     loaderSearch.value = true;
 
     const { estatus, nombre } = filters.value;
-    const { error: errorGet, mensaje: msgGet, candidatos, totalPaginas } = await getCandidates({ ...pagination.value }, { ...filters.value });
+    const { error: errorGet, mensaje: msgGet, vacantesCandidatos, totalPaginas } = await getCandidatesVacancie(props.vacancieId, { ...pagination.value }, { ...filters.value });
 
     totalPages.value = totalPaginas || 1;
 
@@ -188,18 +266,20 @@ const displayCandidates = async () => {
         return await displayCandidates();
     }
 
-    candidates.value = candidatos || [];
+    candidates.value = vacantesCandidatos || [];
 
     loaderSearch.value = false;
 }
 
 const setCvTitle = async (candidateId = '') => {
     const pdfDOM = document.querySelector('#cvModal embed');
-    const selectedCandidate = candidates.value.filter(({ id }) => candidateId === id)[0];
+    const selectedCandidate = candidates.value.find(({ id }) => candidateId === id);
 
     cvTitle.value = `${selectedCandidate.nombre} ${selectedCandidate.apellidos}`;
     pdfDOM.src = `${baseUrl}/cv/${selectedCandidate.id}.pdf`;
 
+    const { respuestas } = selectedCandidate;
+    answers.value = respuestas === 'Array' ? [] : JSON.parse(respuestas);
     await onCandidateView(selectedCandidate);
 }
 
@@ -215,6 +295,33 @@ const prevPage = async () => {
 }
 
 // General functions
+const getCity = (location = '') => {
+    const splitLocation = location.split(',');
+    return splitLocation[splitLocation.length - 2];
+}
+
+const getEndDate = (date = '') => {
+    const monthText = {
+        0: 'Enero',
+        1: 'Febrero',
+        2: 'Marzo',
+        3: 'Abril',
+        4: 'Mayo',
+        5: 'Junio',
+        6: 'Julio',
+        7: 'Agosto',
+        8: 'Septiembre',
+        9: 'Octubre',
+        10: 'Noviembre',
+        11: 'Diciembre',
+    }
+    const splitDate = date.split('-'),
+        formatDate = `${splitDate[1]}-${splitDate[0]}-${splitDate[2]}`,
+        endDate = new Date(formatDate);
+
+    return `${endDate.getDate()} de ${monthText[endDate.getMonth()]} de ${endDate.getFullYear()}`;
+}
+
 const calculateAge = (_date) => {
     const today = new Date(),
         birthDate = new Date(_date);
@@ -231,7 +338,7 @@ const calculateAge = (_date) => {
 const onCandidateView = async (selectedCandidate = {}) => {
     if (selectedCandidate.estatus !== 'Recibido') return;
 
-    const { error: errorView, mensaje: msgView } = await viewCandidate({ ...selectedCandidate });
+    const { error: errorView, mensaje: msgView } = await viewCandidateVacancie({ ...selectedCandidate });
     if (errorView)
         return console.warn(msgView);
 
@@ -239,7 +346,7 @@ const onCandidateView = async (selectedCandidate = {}) => {
 }
 
 const onCandidateDiscard = async (candidateId = '') => {
-    const selectedCandidate = candidates.value.filter(({ id }) => candidateId === id)[0];
+    const selectedCandidate = candidates.value.find(({ id }) => candidateId === id);
 
     Swal.fire({
         title: 'Descartar Candidato',
@@ -255,7 +362,7 @@ const onCandidateDiscard = async (candidateId = '') => {
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
-        const { error: errorDiscard, mensaje: msgDiscard } = await discardCandidate({ ...selectedCandidate });
+        const { error: errorDiscard, mensaje: msgDiscard } = await discardCandidateVacancie({ ...selectedCandidate });
         if (errorDiscard)
             return console.warn(msgDiscard);
 
@@ -274,7 +381,7 @@ const onCandidateDiscard = async (candidateId = '') => {
 }
 
 const onCandidateDelete = async (candidateId = '') => {
-    const selectedCandidate = candidates.value.filter(({ id }) => candidateId === id)[0];
+    const selectedCandidate = candidates.value.find(({ id }) => candidateId === id);
 
     Swal.fire({
         title: 'Eliminar Candidato',
@@ -290,7 +397,77 @@ const onCandidateDelete = async (candidateId = '') => {
     }).then(async (result) => {
         if (!result.isConfirmed) return;
 
-        const { error: errorDelete, mensaje: msgDelete } = await deleteCandidate({ ...selectedCandidate });
+        const { error: errorDelete, mensaje: msgDelete } = await deleteCandidateVacancie({ ...selectedCandidate });
+        if (errorDelete)
+            return console.warn(msgDelete);
+
+        Swal.fire({
+            title: `<h3 class='fw-bold'>
+            ${msgDelete}
+        </h3>`,
+            icon: 'success',
+            showConfirmButton: false,
+            showCloseButton: true,
+            width: '400px',
+        });
+
+        await displayCandidates();
+    });
+}
+
+const onCandidateSelect = async (candidateId = '') => {
+    const selectedCandidate = candidates.value.find(({ id }) => candidateId === id);
+
+    Swal.fire({
+        title: 'Seleccionar Candidato',
+        text: `¿Realmente desea seleccionar como destacado al candidato: ${selectedCandidate.nombre} ${selectedCandidate.apellidos}?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: 'Seleccionar',
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: "#d33",
+        width: '500px',
+        reverseButtons: true,
+        customClass: customClass,
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
+
+        const { error: errorDelete, mensaje: msgDelete } = await selectCandidateVacancie({ ...selectedCandidate });
+        if (errorDelete)
+            return console.warn(msgDelete);
+
+        Swal.fire({
+            title: `<h3 class='fw-bold'>
+            ${msgDelete}
+        </h3>`,
+            icon: 'success',
+            showConfirmButton: false,
+            showCloseButton: true,
+            width: '400px',
+        });
+
+        await displayCandidates();
+    });
+}
+
+const onCandidateFinalist = async (candidateId = '') => {
+    const selectedCandidate = candidates.value.find(({ id }) => candidateId === id);
+
+    Swal.fire({
+        title: 'Seleccionar como finalista al Candidato',
+        text: `¿Realmente desea seleccionar como finalista al candidato: ${selectedCandidate.nombre} ${selectedCandidate.apellidos}?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: 'Seleccionar',
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: "#d33",
+        width: '500px',
+        reverseButtons: true,
+        customClass: customClass,
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
+
+        const { error: errorDelete, mensaje: msgDelete } = await finalistCandidateVacancie({ ...selectedCandidate });
         if (errorDelete)
             return console.warn(msgDelete);
 
