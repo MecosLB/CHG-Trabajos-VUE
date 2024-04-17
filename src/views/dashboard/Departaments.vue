@@ -1,10 +1,12 @@
 <template>
-    <section id="departments">
-        <div class="container-fluid mb-4">
-            <Breadcrumb :moduleName="'Departamentos'" />
+    <section id="departments" class="container-fluid">
+        <Breadcrumb :moduleName="'Departamentos'" class="mb-4" />
+
+        <div v-if="loader" class="loader-view">
+            <Loader />
         </div>
 
-        <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
+        <div v-else class="container d-flex flex-column gap-5 mt-3 align-items-end">
             <div class="w-100 d-flex align-items-center justify-content-between">
                 <button v-if="filterDept.nombre || filterDept.estatus || filterDept.idEmpresa" @click="clearFilter"
                     class="btn btn-sm btn-outline-danger px-5 rounded-5">
@@ -17,7 +19,8 @@
                 </button>
             </div>
 
-            <table v-if="departments.length" class="table departments table-striped text-center align-middle">
+            <table v-if="departments.length"
+                class="table departments table-striped text-center align-middle animate__animated animate__fadeIn">
                 <thead>
                     <tr class="align-middle">
                         <th scope="col">
@@ -100,7 +103,7 @@
                     <tr v-for="{ id, estatus, nombre, empresa='' } of departments">
                         <td class="fw-bold status-company">
                             <i :class="`fa-solid fa-circle-dot ${estatus === 'Activo' ? 'active' : 'suspend'}`"></i> {{
-                estatus }}
+            estatus }}
                         </td>
                         <td v-if="empresa && isSuperAdmin()" class="fw-bold">
                             {{ empresa }}
@@ -128,9 +131,9 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title" id="deptModalLabel">{{ deptTitle }} departamento {{
-                deptTitle
-                    ===
-                    'Editar' ? `: ${activeDept.nombre}` : null }}</h6>
+            deptTitle
+                ===
+                'Editar' ? `: ${activeDept.nombre}` : null }}</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -181,10 +184,12 @@ import { createDepartment, getDepartments, updateDepartment, deleteDepartment } 
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 import { getCompanies } from '@/helpers/dashboard/companies';
+import Loader from '@/components/Loader.vue';
 
 const departments = ref([]),
     companies = ref([]),
     deptTitle = ref('Añadir'),
+    loader = ref(true),
     activeDept = ref({
         id: '',
         idEmpresa: '',
@@ -213,6 +218,8 @@ onMounted(async () => {
 
     if (isSuperAdmin())
         await displayCompanies();
+
+    loader.value = false;
 
     // Modal events
     deptModal.addEventListener('hidden.bs.modal', e => {
@@ -476,4 +483,4 @@ const modalDept = ({ target }) => {
             break;
     }
 }
-</script>@/helpers/dashboard/departments
+</script>

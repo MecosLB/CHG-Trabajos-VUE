@@ -16,7 +16,7 @@
                                     <span class="card-subtitle"> {{ infoCompany.name }} </span>
                                 </div>
 
-                                <form autocomplete="off">
+                                <form>
                                     <div class="mb-3">
                                         <div class="col-12">
                                             <label for="email" class="form-label">
@@ -24,7 +24,7 @@
                                                 Correo
                                             </label>
                                             <input type="email" class="form-control" id="email" placeholder=""
-                                                autocomplete="off" v-model="loginForm.email" @change="changeEmail"
+                                                v-model="loginForm.email" @change="changeEmail"
                                                 @keyup.enter="validateLogin">
                                             <small id="email-error" class="error-form"> {{ errorMessage }} </small>
                                         </div>
@@ -37,7 +37,7 @@
                                                 Contraseña
                                             </label>
                                             <input type="password" class="form-control" id="password" placeholder=""
-                                                autocomplete="off" v-model="loginForm.password" @change="changePassword"
+                                                v-model="loginForm.password" @change="changePassword"
                                                 @keyup.enter="validateLogin">
                                             <small id="password-error" class="error-form"> {{ errorMessage }} </small>
                                         </div>
@@ -118,7 +118,7 @@ const changeEmail = () => {
             field: 'email',
             message: 'Error: Correo Invalido.'
         });
-        
+
         return;
     }
 }

@@ -1,16 +1,19 @@
 <template>
-    <section id="users">
-        <div class="container-fluid mb-4">
-            <Breadcrumb :moduleName="'Usuarios'" />
+    <section id="users" class="container-fluid">
+        <Breadcrumb :moduleName="'Usuarios'" class="mb-4" />
+
+        <div v-if="loader" class="loader-view">
+            <Loader />
         </div>
 
-        <div class="container d-flex flex-column gap-5 mt-3 align-items-end">
+        <div v-else class="container d-flex flex-column gap-5 mt-3 align-items-end">
             <button @click="updateTitle" class="btn-main btn btn-sm btn-outline-primary rounded-5"
                 data-bs-toggle="modal" data-bs-target="#userModal">
                 <i class="fa-solid fa-plus"></i> Agregar Usuario
             </button>
 
-            <table v-if="users.length" class="table users table-striped text-center align-middle">
+            <table v-if="users.length"
+                class="table users table-striped text-center align-middle animate__animated animate__fadeIn">
                 <thead>
                     <tr class="align-middle">
                         <th scope="col">
@@ -66,7 +69,7 @@
                     <tr v-for="{ id, estatus, nombre } of users">
                         <td class="fw-bold status-company">
                             <i :class="`fa-solid fa-circle-dot ${estatus === 'Activo' ? 'active' : 'suspend'}`"></i> {{
-                estatus }}
+            estatus }}
                         </td>
                         <td class="fw-bold">
                             {{ nombre }}
@@ -91,8 +94,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title" id="userModalLabel">{{ userTitle }} usuario {{ userTitle
-                ===
-                'Editar' ? `: ${activeUser.nombre}` : null }}</h6>
+            ===
+            'Editar' ? `: ${activeUser.nombre}` : null }}</h6>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                             <i class="fa-solid fa-xmark"></i>
                         </button>
@@ -189,9 +192,11 @@ import { getProfiles } from '@/helpers/dashboard/profiles';
 import { createUser, getUsers, updateUser, deleteUser } from '@/helpers/dashboard/users';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
+import Loader from '@/components/Loader.vue';
 
 const users = ref([]),
     userTitle = ref('Añadir'),
+    loader = ref(true),
     activeUser = ref({
         id: '',
         idPerfil: '',
@@ -226,6 +231,8 @@ onMounted(async () => {
     users.value = usuarios || [];
     companies.value = empresas || [];
     profiles.value = perfiles || [];
+
+    loader.value = false;
 
     // Modal events
     userModal.addEventListener('hidden.bs.modal', e => {
@@ -498,4 +505,4 @@ const modalUser = ({ target }) => {
             break;
     }
 }
-</script>@/helpers/dashboard/companies@/helpers/dashboard/profiles@/helpers/dashboard/users
+</script>

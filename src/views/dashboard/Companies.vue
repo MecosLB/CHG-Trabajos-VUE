@@ -57,85 +57,76 @@
                 </div>
             </div>
 
-            <div class="grid-companies">
+            <div class="grid-companies animate__animated animate__fadeIn">
                 <div v-if="companies.length > 0" v-for="company in companies" :key="company.id"
-                    class="col-12 col-sm-12 col-md-12 col-lg-6 p-2">
-                    <div class="card">
-                        <div class="d-flex flex-row align-items-center justify-content-end p-2">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-primary rounded-1" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <button class="dropdown-item" type="button" data-bs-toggle="modal"
-                                            data-bs-target="#modalCompany"
-                                            @click="modalCompany({ action: 'Editar', company: company })">
-                                            <i class="fa-solid fa-pen me-1"></i>
-                                            Editar
-                                        </button>
-                                    </li>
+                    class="col-12 col-lg-6 p-4 z-3">
+                    <div
+                        :class="`card flex-row align-items-center justify-content-between position-relative p-3 ${statusClass[company.estatus]}`">
+                        <div class="dropdown z-3 position-absolute">
+                            <button class="btn btn-sm btn-outline-primary rounded-1" type="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <button class="dropdown-item" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modalCompany"
+                                        @click="modalCompany({ action: 'Editar', company: company })">
+                                        <i class="fa-solid fa-pen me-1"></i>
+                                        Editar
+                                    </button>
+                                </li>
 
-                                    <li v-if="company.estatus !== 'Suspendido'">
-                                        <button class="dropdown-item" type="button" @click="suspend(company)">
-                                            <i class="fa-solid fa-eye-slash me-1"></i>
-                                            Suspender
-                                        </button>
-                                    </li>
+                                <li v-if="company.estatus !== 'Suspendido'">
+                                    <button class="dropdown-item" type="button" @click="suspend(company)">
+                                        <i class="fa-solid fa-eye-slash me-1"></i>
+                                        Suspender
+                                    </button>
+                                </li>
 
-                                    <li v-if="company.estatus == 'Suspendido'">
-                                        <button class="dropdown-item" type="button" @click="active(company)">
-                                            <i class="fa-solid fa-eye me-1"></i>
-                                            Activar
-                                        </button>
-                                    </li>
+                                <li v-if="company.estatus == 'Suspendido'">
+                                    <button class="dropdown-item" type="button" @click="active(company)">
+                                        <i class="fa-solid fa-eye me-1"></i>
+                                        Activar
+                                    </button>
+                                </li>
 
-                                    <li>
-                                        <button class="dropdown-item" type="button" @click="deleteC(company)">
-                                            <i class="fa-solid fa-trash me-1"></i>
-                                            Eliminar
-                                        </button>
-                                    </li>
-                                </ul>
-                            </div>
+                                <li>
+                                    <button class="dropdown-item" type="button" @click="deleteC(company)">
+                                        <i class="fa-solid fa-trash me-1"></i>
+                                        Eliminar
+                                    </button>
+                                </li>
+                            </ul>
                         </div>
 
-                        <div class="container-card animate__animated animate__fadeIn">
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 d-flex align-items-center justify-content-center">
-                                <img :id="company.id" :src="`logotipos/${company.id}.png`"
-                                    class="img-fluid p-2 rounded-3" :alt="company.nombre" :title="company.nombre"
-                                    @error="setDefaultLogotipo(company.id)">
-                            </div>
+                        <img :id="company.id" :src="`logotipos/${company.id}.png`" class="img" :alt="company.nombre"
+                            :title="company.nombre" @error="setDefaultLogotipo(company.id)">
 
-                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                <div class="d-flex flex-column pb-md-3">
-                                    <ul class="list-group">
-                                        <li class="list-group-item title">
-                                            {{ company.nombre }}
-                                        </li>
-                                        <li class="list-group-item">
-                                            <i class="fa-solid fa-location-dot me-1"></i>
-                                            {{ company.direccion }}
-                                        </li>
-                                        <li class="list-group-item">
-                                            <i class="fa-solid fa-at me-1"></i>
-                                            {{ company.correo }}
-                                        </li>
-                                        <li class="list-group-item">
-                                            <i class="fa-solid fa-phone me-1"></i>
-                                            {{ company.telefono }}
-                                        </li>
-                                    </ul>
+                        <article class="info d-flex flex-column">
+                            <ul class="list-group">
+                                <li class="list-group-item title" :title="company.nombre">
+                                    {{ company.nombre }}
+                                </li>
+                                <li class="list-group-item" :title="company.direccion">
+                                    <i class="fa-solid fa-location-dot me-1"></i>
+                                    {{ company.direccion }}
+                                </li>
+                                <li class="list-group-item" :title="company.correo">
+                                    <i class="fa-solid fa-at me-1"></i>
+                                    {{ company.correo }}
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="fa-solid fa-phone me-1"></i>
+                                    {{ company.telefono }}
+                                </li>
+                            </ul>
 
-                                    <div class="status-company text-end">
-                                        <small class="fw-bold">
-                                            <i :class="setClassStatus(company.estatus)"></i> {{ company.estatus }}
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            <small class="status-company ms-auto fw-bold mt-3">
+                                <i :class="`fa-solid fa-circle-dot me-2 ${statusClass[company.estatus]}`"></i>
+                                {{ company.estatus }}
+                            </small>
+                        </article>
                     </div>
                 </div>
 
@@ -375,7 +366,7 @@ const loaderModal = ref(false);
 const messageCompanies = ref('No existen registros de empresas.');
 const pagination = ref({
     page: 1,
-    results: 3,
+    results: 4,
 });
 const searchForm = ref('');
 const statusOptions = ref([
@@ -384,6 +375,11 @@ const statusOptions = ref([
 ]);
 const showMessageCompanies = ref(false);
 const totalPages = ref(1);
+
+const statusClass = {
+    'Activo': 'active',
+    'Suspendido': 'suspend',
+}
 
 onMounted(async () => {
     await loadView();
@@ -561,16 +557,16 @@ const loadCompanies = async () => {
             showMessageCompanies.value = true;
             messageCompanies.value = mensaje;
 
-            showAlert({ 
-                title: '¡ERROR!', 
-                message: mensaje, 
+            showAlert({
+                title: '¡ERROR!',
+                message: mensaje,
                 icon: 'error',
             });
         }
     } catch (error) {
-        showAlert({ 
-            title: '¡ERROR!', 
-            message: error, 
+        showAlert({
+            title: '¡ERROR!',
+            message: error,
             icon: 'error',
         });
     }
@@ -704,10 +700,10 @@ const statusSelected = (status) => {
     return option ? option.label : '';
 }
 
-const setClassStatus = (status) => {
-    if (status == 'Activo') return 'fa-solid fa-circle-dot me-2 active'
-    else return 'fa-solid fa-circle-dot me-2 suspend'
-}
+// const setClassStatus = (status) => {
+//     if (status == 'Activo') return 'fa-solid fa-circle-dot me-2 active'
+//     else return 'fa-solid fa-circle-dot me-2 suspend'
+// }
 
 const setError = (conf) => {
     const { field, message } = conf;
